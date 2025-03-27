@@ -1,0 +1,12 @@
+{
+  "name": "clickask-webllm",
+  "version": "0.0.1",
+  "description": "ClickAsk WebLLM is a browser shortcut that lets you quickly ask AI-powered responses using a pre-defined LLM (Large Language Model) via WebLLM. With just a right-click, get instant insights, explanations, or assistance without switching tabs",
+  "main": "index.js",
+  "repository": "git@github.com:irfanhkm/clickask-webllm.git",
+  "author": "Irfan Hakim <hakimirfan90@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}
