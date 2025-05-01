@@ -1,33 +1,28 @@
-# Node modules
-node_modules/
-
-# TypeScript build output
-dist/
-out/
-build/
-
-# TypeScript config cache
-tsconfig.tsbuildinfo
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Logs and debugging files
+# Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Editor and system files
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+node_modules
+dist
+dist-ssr
+*.local
 
-# Jest test cache & coverage
-jest.config.js
-jest.config.ts
-coverage/
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Config files
+.webextrc
+.webextrc.*

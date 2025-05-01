@@ -1,12 +1,35 @@
 {
   "name": "clickask-webllm",
   "version": "0.0.1",
-  "description": "ClickAsk WebLLM is a browser shortcut that lets you quickly ask AI-powered responses using a pre-defined LLM (Large Language Model) via WebLLM. With just a right-click, get instant insights, explanations, or assistance without switching tabs",
-  "main": "index.js",
+  "description": "ClickAsk WebLLM is a browser shortcut that lets you using a pre-defined LLM (Large Language Model) via WebLLM.",
   "repository": "git@github.com:irfanhkm/clickask-webllm.git",
   "author": "Irfan Hakim <hakimirfan90@gmail.com>",
   "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.0.1",
+    "@langchain/core": "^0.1.63",
+    "@langchain/openai": "^0.0.1",
+    "@mlc-ai/web-llm": "^0.2.78",
+    "@types/chrome": "^0.0.313",
+    "langchain": "^0.1.37",
+    "lucide-react": "^0.501.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^7.5.0"
+  },
   "devDependencies": {
-    "typescript": "^5.8.2"
+    "@types/react": "^18.0.26",
+    "@types/react-dom": "^18.0.9",
+    "@types/webextension-polyfill": "^0.10.0",
+    "@vitejs/plugin-react": "^4.2.1",
+    "typescript": "~5.6.3",
+    "vite": "^5.0.0",
+    "vite-plugin-web-extension": "^4.0.0",
+    "webextension-polyfill": "^0.10.0"
   }
 }
