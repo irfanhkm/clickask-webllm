@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { MemoryVectorStore } from 'langchain/vectorstores/memory';
-import { Document } from '@langchain/core/documents';
-import { Embeddings } from '@langchain/core/embeddings';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './ChatDetail.css';
@@ -12,16 +9,6 @@ import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager
 import { Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
 import browser from 'webextension-polyfill';
 import { createMarkdownComponents } from './MarkdownComponents';
-
-class DummyEmbeddings extends Embeddings {
-  async embedQuery(text: string): Promise<number[]> {
-    return new Array(1536).fill(0);
-  }
-
-  async embedDocuments(texts: string[]): Promise<number[][]> {
-    return texts.map(() => new Array(1536).fill(0));
-  }
-}
 
 interface Message {
   role: 'user' | 'assistant';
@@ -38,14 +25,6 @@ interface ChatRoom {
   isVisibleInContextMenu?: boolean;
 }
 
-// Add this type definition for code component props
-interface CodeProps {
-  inline?: boolean;
-  className?: string;
-  children: React.ReactNode;
-  [key: string]: any;
-}
-
 const ChatDetail: React.FC = () => {
   const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
@@ -56,7 +35,6 @@ const ChatDetail: React.FC = () => {
   const [selectedModel, setSelectedModel] = useState<string>('');
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const vectorStoreRef = useRef<MemoryVectorStore | null>(null);
   const engineRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
@@ -95,22 +73,6 @@ const ChatDetail: React.FC = () => {
   // Initialize vector store and load available models
   useEffect(() => {
     const initData = async () => {
-      const dummyEmbeddings = {
-        embedQuery: async () => Array(1536).fill(0),
-        embedDocuments: async (texts: string[]) => texts.map(() => Array(1536).fill(0))
-      };
-      
-      // Create new vector store for this room
-      vectorStoreRef.current = new MemoryVectorStore(dummyEmbeddings);
-      
-      // Load previous messages into vector store if they exist
-      if (room?.messages) {
-        const documents = room.messages.map(msg => 
-          new Document({ pageContent: msg.content })
-        );
-        await vectorStoreRef.current.addDocuments(documents);
-      }
-      
       // Only get downloaded models
       const downloadedModels = localStorage.getItem('downloadedModels');
       if (downloadedModels) {
@@ -125,7 +87,6 @@ const ChatDetail: React.FC = () => {
     // Cleanup function
     return () => {
       // Clear vector store reference
-      vectorStoreRef.current = null;
     };
   }, [room?.id]);
 
@@ -242,15 +203,6 @@ const ChatDetail: React.FC = () => {
     setIsMessageSending(true);
 
     try {
-      // Add message to vector store
-      await vectorStoreRef.current?.addDocuments([
-        new Document({ pageContent: input })
-      ]);
-
-      // Get relevant context from previous messages
-      const relevantDocs = await vectorStoreRef.current?.similaritySearch(input, 3);
-      const context = relevantDocs?.map(doc => doc.pageContent).join('\n') || '';
-
       // Get system prompt from ModelManager
       const systemPrompt = ModelManager.getSystemPrompt();
 

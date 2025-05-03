@@ -169,64 +169,6 @@ export class ModelManager {
   public isModelDownloaded(modelId: string): boolean {
     return this.downloadedModels.some(m => m.name === modelId);
   }
-
-  static async backupModelFiles(modelId: string): Promise<Blob> {
-    try {
-      // Get the cache storage
-      const cache = await caches.open('webllm');
-      
-      // Get all cached files for this model
-      const keys = await cache.keys();
-      const modelFiles = keys.filter(request => 
-        request.url.includes(modelId)
-      );
-      
-      // Create backup data
-      const backupData = {
-        files: await Promise.all(modelFiles.map(async request => {
-          const response = await cache.match(request);
-          if (!response) return null;
-          
-          const data = new Uint8Array(await response.arrayBuffer());
-          return {
-            url: request.url,
-            data: Array.from(data)
-          };
-        }))
-      };
-      
-      return new Blob([JSON.stringify(backupData)], { type: 'application/json' });
-    } catch (error) {
-      console.error('Error backing up model files:', error);
-      throw error;
-    }
-  }
-
-  static async restoreModelFiles(modelId: string, backupBlob: Blob): Promise<void> {
-    try {
-      // Parse the backup data
-      const backupData = JSON.parse(await backupBlob.text());
-      
-      if (!backupData.files || !Array.isArray(backupData.files)) {
-        throw new Error('Invalid backup format');
-      }
-
-      // Get the cache storage
-      const cache = await caches.open('webllm');
-      
-      // Restore each file
-      await Promise.all(backupData.files.map(async (file: { url: string; data: number[] }) => {
-        const response = new Response(new Uint8Array(file.data));
-        await cache.put(file.url, response);
-      }));
-      
-      // Update the downloaded models list
-      await this.addDownloadedModel(modelId);
-    } catch (error) {
-      console.error('Error restoring model files:', error);
-      throw error;
-    }
-  }
 }
 
 export default ModelManager; 
