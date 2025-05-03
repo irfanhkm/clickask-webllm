@@ -28,7 +28,7 @@ const menuItems: MenuItem[] = [
   {
     name: 'Models',
     path: 'models',
-    icon: FileText,
+    icon: Settings,
   },
 ];
 

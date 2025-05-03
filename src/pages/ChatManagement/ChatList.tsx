@@ -4,13 +4,14 @@ import { ModelManager } from '../ModelManagement/ModelManager';
 import { ChatManager } from './ChatManager';
 import { ChatRoom } from './types/chat';
 import { prebuiltAppConfig } from '@mlc-ai/web-llm';
+import { useToggle } from '../../hooks/useToggle';
 import './ChatList.css';
 
 const ChatList: React.FC = () => {
   const navigate = useNavigate();
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
-  const [isCreating, setIsCreating] = useState(false);
+  const [isCreating, toggleCreating] = useToggle(false);
   const [newChatName, setNewChatName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -36,7 +37,7 @@ const ChatList: React.FC = () => {
     const newRoom = await ChatManager.createChatRoom(newChatName, availableModels[0]);
     setChatRooms([...chatRooms, newRoom]);
     setNewChatName('');
-    setIsCreating(false);
+    toggleCreating();
     navigate(`/chats/${newRoom.id}`);
   };
 
@@ -57,26 +58,21 @@ const ChatList: React.FC = () => {
 
   return (
     <div className="chat-list-container">
-      <div className="chat-list-header">
-        <div className="flex items-center gap-4">
-          <h1 className="text-2xl font-bold">Chat Rooms</h1>
-        </div>
+      <div className="flex flex row mb-4 gap-4">
         <button
-          onClick={() => setIsCreating(true)}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          New Chat
+            onClick={() => toggleCreating()}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            New Chat
         </button>
-      </div>
-
-      <div className="search-container">
+        
         <input
-          type="text"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search chats..."
-          className="search-input"
-        />
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search chats..."
+            className="search-input"
+          />
       </div>
 
       {isCreating && (

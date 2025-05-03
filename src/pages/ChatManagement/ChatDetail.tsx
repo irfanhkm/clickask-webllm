@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CreateMLCEngine } from "@mlc-ai/web-llm";
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { Document } from '@langchain/core/documents';
 import { Embeddings } from '@langchain/core/embeddings';
-import { getAvailableModels, getModelInfo } from '../ModelManagement/ModelManager';
 import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
-import { ArrowLeft, Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
+import { Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
 import browser from 'webextension-polyfill';
 
 class DummyEmbeddings extends Embeddings {
@@ -49,10 +47,8 @@ const ChatDetail: React.FC = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const vectorStoreRef = useRef<MemoryVectorStore | null>(null);
   const engineRef = useRef<any>(null);
-  const [downloadProgress, setDownloadProgress] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
-  const [chatTitle, setChatTitle] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
 
   // Scroll to bottom function
@@ -316,6 +312,7 @@ const ChatDetail: React.FC = () => {
       await ChatManager.updateChat(room.id, newRoom);
     } finally {
       setIsMessageSending(false);
+      scrollToBottom();
     }
   };
 
@@ -325,24 +322,6 @@ const ChatDetail: React.FC = () => {
       // You could add a toast notification here if you want
     } catch (err) {
       console.error('Failed to copy text: ', err);
-    }
-  };
-
-  const handleContextMenuToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!room) return;
-    
-    const checked = e.target.checked;
-    const updatedRoom = {
-      ...room,
-      isVisibleInContextMenu: checked,
-      lastUpdated: Date.now()
-    };
-    
-    try {
-      await ChatManager.updateChat(room.id, updatedRoom);
-      setRoom(updatedRoom);
-    } catch (error) {
-      console.error('Error updating chat settings:', error);
     }
   };
 
@@ -417,9 +396,6 @@ const ChatDetail: React.FC = () => {
                       ))}
                     </select>
                   )}
-                  {isModelLoading && (
-                    <span className="text-sm text-gray-500">Initializing model...</span>
-                  )}
                 </div>
               </div>
 
@@ -486,6 +462,9 @@ const ChatDetail: React.FC = () => {
                   <Paperclip size={16} />
                 </button>
               </div>
+              {isModelLoading && (
+                <span className="text-sm text-gray-500">Initializing model...</span>
+              )}
               <button
                 type="submit"
                 disabled={isModelLoading || isMessageSending || !input.trim() || !engineRef.current}
