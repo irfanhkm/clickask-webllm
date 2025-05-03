@@ -1,4 +1,5 @@
 import { CreateMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
+import browser from 'webextension-polyfill';
 
 export interface ModelInfo {
   name: string;
@@ -16,27 +17,34 @@ export const modelList: ModelInfo[] = [
   }
 ];
 
-export const getAvailableModels = (): string[] => {
-  // Get downloaded models from localStorage
-  const downloadedModels = localStorage.getItem('downloadedModels');
-  if (downloadedModels) {
-    const models: ModelInfo[] = JSON.parse(downloadedModels);
-    return models.map(model => model.name);
+export const getAvailableModels = async (): Promise<string[]> => {
+  try {
+    const result = await browser.storage.local.get('downloadedModels');
+    if (result.downloadedModels) {
+      const models: ModelInfo[] = result.downloadedModels;
+      return models.map(model => model.name);
+    }
+    return [];
+  } catch (error) {
+    console.error('Error getting available models:', error);
+    return [];
   }
-  return [];
 };
 
-export const getModelInfo = (modelId: string): ModelInfo | undefined => {
-  // First check downloaded models
-  const downloadedModels = localStorage.getItem('downloadedModels');
-  if (downloadedModels) {
-    const models: ModelInfo[] = JSON.parse(downloadedModels);
-    const downloadedModel = models.find(m => m.name === modelId);
-    if (downloadedModel) return downloadedModel;
+export const getModelInfo = async (modelId: string): Promise<ModelInfo | undefined> => {
+  try {
+    const result = await browser.storage.local.get('downloadedModels');
+    if (result.downloadedModels) {
+      const models: ModelInfo[] = result.downloadedModels;
+      const downloadedModel = models.find(m => m.name === modelId);
+      if (downloadedModel) return downloadedModel;
+    }
+    
+    return modelList.find(model => model.name === modelId);
+  } catch (error) {
+    console.error('Error getting model info:', error);
+    return undefined;
   }
-  
-  // If not found in downloaded models, check the full list
-  return modelList.find(model => model.name === modelId);
 };
 
 export class ModelManager {
@@ -56,12 +64,13 @@ export class ModelManager {
   }
 
   private async loadDownloadedModels() {
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-      const result = await chrome.storage.local.get('downloadedModels');
-      this.downloadedModels = result.downloadedModels || [];
-    } else {
-      const models = localStorage.getItem('downloadedModels');
-      this.downloadedModels = models ? JSON.parse(models) : [];
+    try {
+      const result = await browser.storage.local.get('downloadedModels');
+      if (result.downloadedModels) {
+        this.downloadedModels = result.downloadedModels;
+      }
+    } catch (error) {
+      console.error('Error loading downloaded models:', error);
     }
   }
 
@@ -71,125 +80,62 @@ export class ModelManager {
 
   static async initializeEngine(modelId: string): Promise<any> {
     try {
-      // If we already have an engine for this model, return it
-      if (this.currentEngine?.modelId === modelId) {
-        return this.currentEngine.engine;
-      }
-
-      // If we have a different engine, we need to create a new one
-      // Just set currentEngine to null to allow garbage collection
-      this.currentEngine = null;
-
-      // Create new engine
       const engine = await CreateMLCEngine(modelId);
-      
-      // Update current engine
-      this.currentEngine = {
-        engine,
-        modelId
-      };
-
+      this.currentEngine = { engine, modelId };
       return engine;
     } catch (error) {
       console.error('Error initializing engine:', error);
-      this.currentEngine = null;
       throw error;
     }
   }
 
   static async getAvailableModels(): Promise<string[]> {
     try {
-      // First check if we have downloaded models in storage
-      let downloadedModels: ModelInfo[] = [];
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        const result = await chrome.storage.local.get('downloadedModels');
-        downloadedModels = result.downloadedModels || [];
-      } else {
-        const models = localStorage.getItem('downloadedModels');
-        downloadedModels = models ? JSON.parse(models) : [];
-      }
-
-      // If we have downloaded models, return their names
-      if (downloadedModels.length > 0) {
-        return downloadedModels.map(model => model.name);
-      }
-
-      // Otherwise, return the initial model list from prebuiltAppConfig
-      return prebuiltAppConfig.model_list.map(model => model.model_id);
+      const downloadedModels = JSON.parse(localStorage.getItem('downloadedModels') || '[]');
+      return downloadedModels.map((model: ModelInfo) => model.name);
     } catch (error) {
       console.error('Error getting available models:', error);
-      return prebuiltAppConfig.model_list.map(model => model.model_id);
+      return [];
     }
   }
 
   static async getModelInfo(modelId: string): Promise<ModelInfo | undefined> {
-    // First check if it's in the downloaded models
-    let downloadedModels: ModelInfo[] = [];
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-      const result = await chrome.storage.local.get('downloadedModels');
-      downloadedModels = result.downloadedModels || [];
-    } else {
-      const models = localStorage.getItem('downloadedModels');
-      downloadedModels = models ? JSON.parse(models) : [];
+    try {
+      const result = await browser.storage.local.get('downloadedModels');
+      if (result.downloadedModels) {
+        const models: ModelInfo[] = result.downloadedModels;
+        const downloadedModel = models.find(m => m.name === modelId);
+        if (downloadedModel) return downloadedModel;
+      }
+      
+      return modelList.find(model => model.name === modelId);
+    } catch (error) {
+      console.error('Error getting model info:', error);
+      return undefined;
     }
-
-    return downloadedModels.find(m => m.name === modelId);
   }
 
   static async addDownloadedModel(modelId: string): Promise<void> {
-    const modelRecord = prebuiltAppConfig.model_list.find(m => m.model_id === modelId);
-    if (!modelRecord) {
-      throw new Error(`Model ${modelId} not found in prebuiltAppConfig`);
-    }
+    try {
+      const modelInfo = modelList.find(m => m.name === modelId);
+      if (!modelInfo) return;
 
-    const modelInfo: ModelInfo = {
-      name: modelRecord.model_id,
-      displayName: modelRecord.model_lib
-    };
-
-    let downloadedModels: ModelInfo[] = [];
-    if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-      const result = await chrome.storage.local.get('downloadedModels');
-      downloadedModels = result.downloadedModels || [];
-      downloadedModels.push(modelInfo);
-      await chrome.storage.local.set({ downloadedModels });
-    } else {
-      const models = localStorage.getItem('downloadedModels');
-      downloadedModels = models ? JSON.parse(models) : [];
-      downloadedModels.push(modelInfo);
-      localStorage.setItem('downloadedModels', JSON.stringify(downloadedModels));
+      const result = await browser.storage.local.get('downloadedModels');
+      let models: ModelInfo[] = result.downloadedModels || [];
+      
+      if (!models.some(m => m.name === modelId)) {
+        models.push(modelInfo);
+        await browser.storage.local.set({ downloadedModels: models });
+      }
+    } catch (error) {
+      console.error('Error adding downloaded model:', error);
     }
   }
 
   public async downloadModel(model: ModelRecord): Promise<void> {
-    // Check if model is already downloaded
-    if (this.downloadedModels.some(m => m.name === model.model_id)) {
-      console.log('Model already downloaded, using cached version');
-      return;
-    }
-
     try {
-      // Initialize engine to trigger download
-      await CreateMLCEngine(model.model_id, {
-        initProgressCallback: (report: { progress: number }) => {
-          console.log('Model download progress:', report.progress);
-        }
-      });
-
-      // Add to downloaded models list
-      const modelInfo: ModelInfo = {
-        name: model.model_id,
-        displayName: model.model_lib
-      };
-
-      this.downloadedModels.push(modelInfo);
-
-      // Save to storage
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        await chrome.storage.local.set({ downloadedModels: this.downloadedModels });
-      } else {
-        localStorage.setItem('downloadedModels', JSON.stringify(this.downloadedModels));
-      }
+      await ModelManager.addDownloadedModel(model.model_id);
+      await this.loadDownloadedModels();
     } catch (error) {
       console.error('Error downloading model:', error);
       throw error;

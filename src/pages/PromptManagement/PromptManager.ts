@@ -1,62 +1,52 @@
+import browser from 'webextension-polyfill';
+
 export interface PromptTemplate {
   id: string;
   title: string;
   content: string;
-  createdAt: number;
 }
 
 export class PromptManager {
+  private static STORAGE_KEY = 'promptTemplates';
+
   static async getPromptTemplates(): Promise<PromptTemplate[]> {
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        const result = await chrome.storage.local.get('promptTemplates');
-        return result.promptTemplates || [];
-      } else {
-        const savedTemplates = localStorage.getItem('promptTemplates');
-        return savedTemplates ? JSON.parse(savedTemplates) : [];
-      }
+      const result = await browser.storage.local.get(this.STORAGE_KEY);
+      return result[this.STORAGE_KEY] || [];
     } catch (error) {
       console.error('Error getting prompt templates:', error);
       return [];
     }
   }
 
-  static async addPromptTemplate(title: string, content: string): Promise<PromptTemplate> {
-    const newTemplate: PromptTemplate = {
-      id: Date.now().toString(),
-      title: title.trim(),
-      content: content.trim(),
-      createdAt: Date.now()
-    };
-
-    const templates = await this.getPromptTemplates();
-    const updatedTemplates = [...templates, newTemplate];
-
+  static async savePromptTemplate(template: PromptTemplate): Promise<void> {
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        await chrome.storage.local.set({ promptTemplates: updatedTemplates });
+      const templates = await this.getPromptTemplates();
+      const existingIndex = templates.findIndex(t => t.id === template.id);
+      
+      if (existingIndex >= 0) {
+        templates[existingIndex] = template;
       } else {
-        localStorage.setItem('promptTemplates', JSON.stringify(updatedTemplates));
+        templates.push(template);
       }
+      
+      await browser.storage.local.set({ [this.STORAGE_KEY]: templates });
     } catch (error) {
       console.error('Error saving prompt template:', error);
+      throw error;
     }
-
-    return newTemplate;
   }
 
   static async deletePromptTemplate(id: string): Promise<void> {
-    const templates = await this.getPromptTemplates();
-    const updatedTemplates = templates.filter(template => template.id !== id);
-
     try {
-      if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.local) {
-        await chrome.storage.local.set({ promptTemplates: updatedTemplates });
-      } else {
-        localStorage.setItem('promptTemplates', JSON.stringify(updatedTemplates));
-      }
+      const templates = await this.getPromptTemplates();
+      const filteredTemplates = templates.filter(t => t.id !== id);
+      await browser.storage.local.set({ [this.STORAGE_KEY]: filteredTemplates });
     } catch (error) {
       console.error('Error deleting prompt template:', error);
+      throw error;
     }
   }
-} 
+}
+
+export default PromptManager; 

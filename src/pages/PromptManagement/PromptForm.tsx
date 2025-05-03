@@ -32,11 +32,11 @@ const PromptForm: React.FC = () => {
 
     if (id) {
       // Edit mode
-      await PromptManager.addPromptTemplate(title, content);
+      await PromptManager.savePromptTemplate({ id, title, content });
       await PromptManager.deletePromptTemplate(id);
     } else {
       // Create mode
-      await PromptManager.addPromptTemplate(title, content);
+      await PromptManager.savePromptTemplate({ id: Date.now().toString(), title, content });
     }
 
     navigate('/prompts');

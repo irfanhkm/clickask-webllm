@@ -240,58 +240,56 @@ const ChatDetail: React.FC = () => {
       let response = '';
 
       // System instruction to guide the model's behavior
-      const systemInstruction = `You are a helpful AI assistant. Follow these guidelines:
-      1. Provide clear, concise, and accurate responses
-      2. Stay focused on the current conversation topic
-      3. If you don't know something, say so
-      4. Maintain a professional and helpful tone
-      5. Consider the full conversation history when responding
-      6. Do not repeat or rephrase the user's question in your response
-      7. Get straight to the point with your answer`;
+      const systemInstruction = `You are a helpful AI assistant. Your responses should:
+      1. NEVER repeat or rephrase the user's question
+      2. Provide direct answers without any preamble
+      3. Be concise and to the point
+      4. Focus on the specific information requested
+      5. If you don't know something, simply say "I don't know"`;
 
       // Use the engine's chat completion API with proper message formatting
       const messages = [
         {
           role: "system",
-          content: systemInstruction + (context ? `\n\nPrevious relevant context:\n${context}` : '')
+          content: systemInstruction
         },
-        ...updatedMessages.map(msg => ({
-          role: msg.role,
-          content: msg.content
-        }))
+        ...updatedMessages
       ].filter(msg => msg.content !== "");
 
       const chunks = await engineRef.current.chat.completions.create({
         messages,
         stream: true,
         max_tokens: 1024,
-        temperature: 0.7
+        temperature: 0.7,
+        stream_options: { include_usage: true },
+        response_format: { type: "text" }
       });
       
+      let reply = "";
       for await (const chunk of chunks) {
-        const token = chunk.choices[0]?.delta.content;
-        if (token !== undefined) {
-          response += token;
-          const assistantMessage: Message = { role: 'assistant', content: response };
-          const newMessages = [...updatedRoom.messages, assistantMessage];
-          const newRoom = {
-            ...updatedRoom,
-            messages: newMessages,
-            lastUpdated: Date.now()
-          };
-          setRoom(newRoom);
-
-          // Save to ChatManager
-          await ChatManager.updateChat(room.id, newRoom);
+        const content = chunk.choices[0]?.delta.content;
+        if (content !== undefined && content !== null) {
+          reply += content;
+        }
+        if (chunk.usage) {
+          console.log(chunk.usage); // only last chunk has usage
         }
       }
 
-      // Add assistant's response to vector store only if it's not an error
-      if (response && !response.includes('Sorry, there was an error')) {
-        await vectorStoreRef.current?.addDocuments([
-          new Document({ pageContent: response })
-        ]);
-      }
+      const assistantMessage: Message = { 
+        role: 'assistant', 
+        content: reply
+      };
+      const newMessages = [...updatedRoom.messages, assistantMessage];
+      const newRoom = {
+        ...updatedRoom,
+        messages: newMessages,
+        lastUpdated: Date.now()
+      };
+      setRoom(newRoom);
+
+      // Save to ChatManager
+      await ChatManager.updateChat(room.id, newRoom);
 
     } catch (error) {
       console.error('Error in chat:', error);

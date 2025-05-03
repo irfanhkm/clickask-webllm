@@ -1,50 +1,21 @@
+@import '../../components/PageLayout.css';
+
 .prompt-form-container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
+  composes: page-container;
 }
 
 .prompt-form-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 1rem;
-  height: auto;
-}
-
-.prompt-form-header h1 {
-  margin: 0;
-  flex: 1;
-  color: black;
-}
-
-.back-button {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  background: #f3f4f6;
-  color: #4b5563;
+  composes: page-header;
 }
 
 .prompt-form {
-  padding: 1rem;
+  composes: page-content;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
-  height: auto;
 }
 
 .form-group {
@@ -84,27 +55,14 @@
   justify-content: flex-start;
   gap: 0.75rem;
   margin-top: 1rem;
-  height: auto;
-}
-
-.cancel-button,
-.save-button {
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 500;
 }
 
 .cancel-button {
-  background: #f3f4f6;
-  color: #4b5563;
+  composes: secondary-button;
 }
 
 .save-button {
-  background: #2563eb;
-  color: white;
+  composes: primary-button;
 }
 
 .save-button:disabled {

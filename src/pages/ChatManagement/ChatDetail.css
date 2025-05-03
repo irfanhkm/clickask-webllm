@@ -1,46 +1,11 @@
+@import '../../components/PageLayout.css';
+
 .chat-container {
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: white;
+  composes: page-container;
 }
 
 .chat-header {
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #e5e7eb;
-  padding: 8px;
-  height: auto;
-}
-
-.chat-header button {
-  width: 100%;
-  padding: 12px;
-  background: #2563eb;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-}
-
-.chat-container h1 {
-  margin: 0;
-  text-align: center;
-  font-size: 16px;
-  color: black;
-}
-
-.chat-header select {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 14px;
-  background: white;
+  composes: page-header;
 }
 
 .chat-main {

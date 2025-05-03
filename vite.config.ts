@@ -19,6 +19,11 @@ export default defineConfig({
     react(),
     webExtension({
       manifest: generateManifest,
+      browser: "firefox",
+      webExtConfig: {
+        target: ["firefox-desktop"],
+        firefox: "/Applications/Firefox Nightly.app/Contents/MacOS/firefox"
+      }
     }),
   ],
 });

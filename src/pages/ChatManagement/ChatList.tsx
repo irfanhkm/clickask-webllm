@@ -59,12 +59,6 @@ const ChatList: React.FC = () => {
     <div className="chat-list-container">
       <div className="chat-list-header">
         <div className="flex items-center gap-4">
-          <button
-            onClick={() => navigate('/')}
-            className="bg-gray-200 text-gray-700 px-4 py-2 rounded hover:bg-gray-300"
-          >
-            Back
-          </button>
           <h1 className="text-2xl font-bold">Chat Rooms</h1>
         </div>
         <button

@@ -1,5 +1,9 @@
 {
   "{{chrome}}.manifest_version": 3,
+  "{{firefox}}.manifest_version": 2,
+  "name": "ClickAsk WebLLM",
+  "version": "0.0.1",
+  "description": "ClickAsk WebLLM is a browser shortcut that lets you using a pre-defined LLM (Large Language Model) via WebLLM.",
   "icons": {
     "16": "icon/16.png",
     "32": "icon/32.png",
@@ -7,13 +11,29 @@
     "96": "icon/96.png",
     "128": "icon/128.png"
   },
-  "side_panel": {
+  "{{chrome}}.side_panel": {
     "default_path": "src/PanelRoute.html"
   },
+  "{{firefox}}.sidebar_action": {
+    "default_panel": "src/PanelRoute.html"
+  },
   "{{chrome}}.permissions": [
-    "sidePanel"
+    "sidePanel",
+    "tabs",
+    "storage"
+  ],
+  "{{firefox}}.permissions": [
+    "tabs",
+    "storage"
   ],
   "background": {
-    "{{chrome}}.service_worker": "src/background.ts"
-  }
+    "{{chrome}}.service_worker": "src/background.ts",
+    "{{firefox}}.scripts": ["src/background.ts"]
+  },
+  "{{firefox}}.browser_specific_settings": {
+    "gecko": {
+      "id": "clickask-webllm@example.com"
+    }
+  },
+  "{{firefox}}.content_security_policy": "script-src 'self' 'wasm-unsafe-eval' http://localhost:*; object-src 'self'"
 }
