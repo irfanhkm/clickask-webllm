@@ -20,11 +20,15 @@
   "{{chrome}}.permissions": [
     "sidePanel",
     "tabs",
-    "storage"
+    "storage",
+    "contextMenus",
+    "activeTab"
   ],
   "{{firefox}}.permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "contextMenus",
+    "activeTab"
   ],
   "background": {
     "{{chrome}}.service_worker": "src/background.ts",

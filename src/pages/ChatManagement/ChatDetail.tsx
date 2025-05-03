@@ -9,7 +9,8 @@ import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
+import browser from 'webextension-polyfill';
 
 class DummyEmbeddings extends Embeddings {
   async embedQuery(text: string): Promise<number[]> {
@@ -33,6 +34,7 @@ interface ChatRoom {
   messages: Message[];
   createdAt: number;
   lastUpdated: number;
+  isVisibleInContextMenu?: boolean;
 }
 
 const ChatDetail: React.FC = () => {
@@ -51,6 +53,7 @@ const ChatDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
   const [chatTitle, setChatTitle] = useState<string | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   // Scroll to bottom function
   const scrollToBottom = () => {
@@ -131,9 +134,13 @@ const ChatDetail: React.FC = () => {
         // Get room from ChatManager
         const room = await ChatManager.getChatRoom(roomId);
         if (room) {
+          // Set current chat ID in storage for context menu
+          await browser.storage.local.set({ currentChatId: roomId });
+          
           setRoom({
             ...room,
-            lastUpdated: room.lastUpdated || Date.now()
+            lastUpdated: room.lastUpdated || Date.now(),
+            isVisibleInContextMenu: room.isVisibleInContextMenu ?? false
           });
           
           if (room.modelId) {
@@ -312,71 +319,136 @@ const ChatDetail: React.FC = () => {
     }
   };
 
+  const handleCopyMessage = async (content: string) => {
+    try {
+      await navigator.clipboard.writeText(content);
+      // You could add a toast notification here if you want
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
+  const handleContextMenuToggle = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!room) return;
+    
+    const checked = e.target.checked;
+    const updatedRoom = {
+      ...room,
+      isVisibleInContextMenu: checked,
+      lastUpdated: Date.now()
+    };
+    
+    try {
+      await ChatManager.updateChat(room.id, updatedRoom);
+      setRoom(updatedRoom);
+    } catch (error) {
+      console.error('Error updating chat settings:', error);
+    }
+  };
+
+  const handleAttachmentClick = () => {
+    // TODO: Implement attachment functionality
+    console.log('Attachment clicked');
+  };
+
   if (!room) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div className="chat-container">
-      <div className="chat-header">
-        <button onClick={() => navigate('/')}>
-          <ArrowLeft size={20} />
-        </button>
-        <h1>{chatTitle || 'New Chat'}</h1>
-        {selectedModel && (
-          <select
-            value={selectedModel}
-            onChange={handleModelChange}
-            disabled={isModelLoading || isMessageSending}
-          >
-            {availableModels.map((model) => (
-              <option key={model} value={model}>
-                {model}
-              </option>
-            ))}
-          </select>
-        )}
-        {isModelLoading && <span>Initializing model...</span>}
-      </div>
-
+    <div className="chat-detail">
       <div className="chat-main">
-        {room.messages.map((message, index) => (
-          <div
-            key={index}
-            className={message.role === 'user' ? 'message-user' : 'message-assistant'}
-          >
-            {message.content}
+        {room.messages.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8">
+            <div className="bg-gray-100 p-4 rounded-full mb-4">
+              <Plus size={24} className="text-gray-500" />
+            </div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">Start a new conversation</h2>
+            <p className="text-gray-500 max-w-md">
+              Select a template or type your message to begin chatting with the AI assistant.
+            </p>
           </div>
-        ))}
-        <div ref={messagesEndRef} style={{ float: 'left', clear: 'both' }} />
+        ) : (
+          <>
+            {room.messages.map((message, index) => (
+              <div
+                key={index}
+                className={`message ${message.role === 'user' ? 'message-user' : 'message-assistant'}`}
+              >
+                {message.content}
+                {message.role === 'assistant' && (
+                  <div className="message-actions">
+                    <button 
+                      className="p-1 hover:bg-gray-100 rounded-full"
+                      onClick={() => handleCopyMessage(message.content)}
+                      title="Copy message"
+                    >
+                      <Copy size={16} />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))}
+            <div ref={messagesEndRef} style={{ float: 'left', clear: 'both' }} />
+          </>
+        )}  
       </div>
-
       <div className="chat-footer">
         <form onSubmit={(e) => {
           e.preventDefault();
           handleSend();
         }}>
-          <div className="template-selector">
-            <select 
-              onChange={(e) => handleTemplateSelect(e.target.value)}
-              value=""
-              className="template-select"
-            >
-              <option value="">Select a template</option>
-              {templates.map(template => (
-                <option key={template.id} value={template.id}>
-                  {template.title}
-                </option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={() => navigate('/prompts')}
-              className="manage-templates-button"
-            >
-              Manage Templates
-            </button>
-          </div>
+          {showSettings && (
+            <div className="settings-panel">
+              <div className="settings-section">
+                <h3>Model Settings</h3>
+                <div className="template-selector">
+                  {selectedModel && (
+                    <select
+                      value={selectedModel}
+                      onChange={handleModelChange}
+                      disabled={isModelLoading || isMessageSending}
+                      className="model-select"
+                    >
+                      {availableModels.map((model) => (
+                        <option key={model} value={model}>
+                          {model}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                  {isModelLoading && (
+                    <span className="text-sm text-gray-500">Initializing model...</span>
+                  )}
+                </div>
+              </div>
+
+              <div className="settings-section">
+                <h3>Template Settings</h3>
+                <div className="template-selector">
+                  <select 
+                    onChange={(e) => handleTemplateSelect(e.target.value)}
+                    value=""
+                    className="template-select"
+                  >
+                    <option value="">Select a template</option>
+                    {templates.map(template => (
+                      <option key={template.id} value={template.id}>
+                        {template.title}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/prompts')}
+                    className="manage-templates-button"
+                  >
+                    Manage Templates
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
           <div className="input-area">
             <textarea
               value={input}
@@ -387,15 +459,48 @@ const ChatDetail: React.FC = () => {
                   handleSend();
                 }
               }}
-              placeholder="Type a message..."
+              placeholder="Ask me anything..."
               disabled={isModelLoading || isMessageSending || !engineRef.current}
+              rows={2}
             />
-            <button
-              type="submit"
-              disabled={isModelLoading || isMessageSending || !input.trim() || !engineRef.current}
-            >
-              {isMessageSending ? 'Sending...' : 'Send'}
-            </button>
+            <div className="input-toolbar">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => navigate('/chats')}
+                  className="back-button"
+                >
+                  ← Back
+                </button>
+                <button
+                  onClick={() => setShowSettings(!showSettings)}
+                  className="settings-button"
+                  type="button"
+                >
+                  <Settings size={16} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAttachmentClick}
+                  className="attachment-button"
+                >
+                  <Paperclip size={16} />
+                </button>
+              </div>
+              <button
+                type="submit"
+                disabled={isModelLoading || isMessageSending || !input.trim() || !engineRef.current}
+                className="send-button"
+              >
+                {isMessageSending ? (
+                  <span className="flex items-center gap-2">
+                    <span className="animate-spin">⚪</span>
+                    Sending...
+                  </span>
+                ) : (
+                  <Send size={16} />
+                )}
+              </button>
+            </div>
           </div>
         </form>
       </div>

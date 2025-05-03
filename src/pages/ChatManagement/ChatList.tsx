@@ -37,7 +37,7 @@ const ChatList: React.FC = () => {
     setChatRooms([...chatRooms, newRoom]);
     setNewChatName('');
     setIsCreating(false);
-    navigate(`/chat/${newRoom.id}`);
+    navigate(`/chats/${newRoom.id}`);
   };
 
   const getModelDisplayName = (modelId: string): string => {
@@ -104,7 +104,7 @@ const ChatList: React.FC = () => {
           <div
             key={room.id}
             className="room-item"
-            onClick={() => navigate(`/chat/${room.id}`)}
+            onClick={() => navigate(`/chats/${room.id}`)}
           >
             <div className="room-info">
               <span className="room-name">{room.name}</span>

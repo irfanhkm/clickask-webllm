@@ -149,6 +149,70 @@ export class ModelManager {
   public isModelDownloaded(modelId: string): boolean {
     return this.downloadedModels.some(m => m.name === modelId);
   }
+
+  static async backupModelFiles(modelId: string): Promise<Blob> {
+    try {
+      // Get the cache storage
+      const cache = await caches.open('webllm');
+      
+      // Get all cache entries
+      const keys = await cache.keys();
+      const modelFiles = keys.filter(key => key.url.includes(modelId));
+      
+      if (modelFiles.length === 0) {
+        throw new Error(`Model ${modelId} not found in cache storage`);
+      }
+
+      // Create a backup object containing the model files
+      const backupData = {
+        modelId,
+        files: await Promise.all(modelFiles.map(async (request) => {
+          const response = await cache.match(request);
+          if (!response) {
+            throw new Error(`Failed to get file: ${request.url}`);
+          }
+          const data = await response.arrayBuffer();
+          return {
+            url: request.url,
+            data: Array.from(new Uint8Array(data))
+          };
+        }))
+      };
+
+      // Convert to JSON and create blob
+      const blob = new Blob([JSON.stringify(backupData)], { type: 'application/json' });
+      return blob;
+    } catch (error) {
+      console.error('Error backing up model files:', error);
+      throw error;
+    }
+  }
+
+  static async restoreModelFiles(modelId: string, backupBlob: Blob): Promise<void> {
+    try {
+      // Parse the backup data
+      const backupData = JSON.parse(await backupBlob.text());
+      
+      if (!backupData.files || !Array.isArray(backupData.files)) {
+        throw new Error('Invalid backup format');
+      }
+
+      // Get the cache storage
+      const cache = await caches.open('webllm');
+      
+      // Restore each file
+      await Promise.all(backupData.files.map(async (file: { url: string; data: number[] }) => {
+        const response = new Response(new Uint8Array(file.data));
+        await cache.put(file.url, response);
+      }));
+      
+      // Update the downloaded models list
+      await this.addDownloadedModel(modelId);
+    } catch (error) {
+      console.error('Error restoring model files:', error);
+      throw error;
+    }
+  }
 }
 
 export default ModelManager; 

@@ -8,4 +8,5 @@ export interface ChatRoom {
   }>;
   createdAt: number;
   lastUpdated: number;
+  isVisibleInContextMenu?: boolean;
 } 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CreateMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
 import { useNavigate } from 'react-router-dom';
-import { modelList, getModelInfo } from './ModelManager';
+import { modelList, getModelInfo, ModelManager } from './ModelManager';
 import './ModelSelection.css';
 
 // Extend ModelRecord to include size
@@ -36,6 +36,7 @@ const ModelSelection: React.FC = () => {
   const [downloadProgress, setDownloadProgress] = useState<DownloadProgress>({});
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isDownloaded, setIsDownloaded] = useState<{[key: string]: boolean}>({});
+  const [backupFile, setBackupFile] = useState<File | null>(null);
 
   useEffect(() => {
     // Check for downloaded models
@@ -103,6 +104,47 @@ const ModelSelection: React.FC = () => {
     }
   };
 
+  const handleBackup = async () => {
+    if (!selectedModel) return;
+
+    try {
+      const backupBlob = await ModelManager.backupModelFiles(selectedModel.model_id);
+      
+      // Create a download link
+      const url = URL.createObjectURL(backupBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${selectedModel.model_id}_backup.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Error backing up model:', error);
+      alert('Failed to backup model files');
+    }
+  };
+
+  const handleRestore = async () => {
+    if (!backupFile || !selectedModel) return;
+
+    try {
+      const backupBlob = new Blob([await backupFile.arrayBuffer()], { type: 'application/json' });
+      await ModelManager.restoreModelFiles(selectedModel.model_id, backupBlob);
+      
+      // Update the downloaded state
+      setIsDownloaded(prev => ({
+        ...prev,
+        [selectedModel.model_id]: true
+      }));
+      
+      alert('Model files restored successfully');
+    } catch (error) {
+      console.error('Error restoring model:', error);
+      alert('Failed to restore model files');
+    }
+  };
+
   return (
     <div className="model-selection">
       <div className="flex justify-between items-center mb-6">
@@ -130,19 +172,48 @@ const ModelSelection: React.FC = () => {
         })}
       </div>
       
-      <button
-        className="download-button"
-        onClick={handleDownload}
-        disabled={!selectedModel || isDownloading || isDownloaded[selectedModel.model_id]}
-      >
-        {selectedModel && isDownloaded[selectedModel.model_id] 
-          ? "Already Downloaded"
-          : isDownloading 
-            ? selectedModel && downloadProgress[selectedModel.model_id] === 0
-              ? "Initializing model download..."
-              : `Downloading... ${selectedModel ? downloadProgress[selectedModel.model_id] || 0 : 0}%` 
-            : 'Download Model'}
-      </button>
+      <div className="model-actions">
+        <button
+          className="download-button"
+          onClick={handleDownload}
+          disabled={!selectedModel || isDownloading || isDownloaded[selectedModel.model_id]}
+        >
+          {selectedModel && isDownloaded[selectedModel.model_id] 
+            ? "Already Downloaded"
+            : isDownloading 
+              ? selectedModel && downloadProgress[selectedModel.model_id] === 0
+                ? "Initializing model download..."
+                : `Downloading... ${selectedModel ? downloadProgress[selectedModel.model_id] || 0 : 0}%` 
+              : 'Download Model'}
+        </button>
+
+        {selectedModel && isDownloaded[selectedModel.model_id] && (
+          <button
+            className="backup-button"
+            onClick={handleBackup}
+          >
+            Backup Model Files
+          </button>
+        )}
+
+        {selectedModel && (
+          <div className="restore-section">
+            <input
+              type="file"
+              accept=".json"
+              onChange={(e) => setBackupFile(e.target.files?.[0] || null)}
+              className="restore-input"
+            />
+            <button
+              className="restore-button"
+              onClick={handleRestore}
+              disabled={!backupFile}
+            >
+              Restore Model Files
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
