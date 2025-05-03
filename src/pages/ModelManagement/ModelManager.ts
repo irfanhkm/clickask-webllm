@@ -6,6 +6,17 @@ export interface ModelInfo {
   displayName: string;
 }
 
+export const DEFAULT_SYSTEM_PROMPT = `You are a helpful AI assistant. Your responses should:
+1. Use markdown formatting for better readability
+2. Format code blocks with proper language tags
+3. Use lists and headers for organization
+4. Use bold/italic for emphasis
+5. NEVER repeat or rephrase the user's question
+6. Provide direct answers without any preamble
+7. Be concise and to the point
+8. Focus on the specific information requested
+9. If you don't know something, simply say "I don't know"`;
+
 export const modelList: ModelInfo[] = [
   {
     name: "SmolLM2-360M-Instruct-q0f16-MLC",
@@ -78,8 +89,17 @@ export class ModelManager {
     return this.currentEngine;
   }
 
+  static getSystemPrompt(): string {
+    return localStorage.getItem('globalSystemPrompt') || DEFAULT_SYSTEM_PROMPT;
+  }
+
   static async initializeEngine(modelId: string): Promise<any> {
     try {
+      const modelInfo = await this.getModelInfo(modelId);
+      if (!modelInfo) {
+        throw new Error(`Model ${modelId} not found`);
+      }
+
       const engine = await CreateMLCEngine(modelId);
       this.currentEngine = { engine, modelId };
       return engine;
@@ -155,33 +175,27 @@ export class ModelManager {
       // Get the cache storage
       const cache = await caches.open('webllm');
       
-      // Get all cache entries
+      // Get all cached files for this model
       const keys = await cache.keys();
-      const modelFiles = keys.filter(key => key.url.includes(modelId));
+      const modelFiles = keys.filter(request => 
+        request.url.includes(modelId)
+      );
       
-      if (modelFiles.length === 0) {
-        throw new Error(`Model ${modelId} not found in cache storage`);
-      }
-
-      // Create a backup object containing the model files
+      // Create backup data
       const backupData = {
-        modelId,
-        files: await Promise.all(modelFiles.map(async (request) => {
+        files: await Promise.all(modelFiles.map(async request => {
           const response = await cache.match(request);
-          if (!response) {
-            throw new Error(`Failed to get file: ${request.url}`);
-          }
-          const data = await response.arrayBuffer();
+          if (!response) return null;
+          
+          const data = new Uint8Array(await response.arrayBuffer());
           return {
             url: request.url,
-            data: Array.from(new Uint8Array(data))
+            data: Array.from(data)
           };
         }))
       };
-
-      // Convert to JSON and create blob
-      const blob = new Blob([JSON.stringify(backupData)], { type: 'application/json' });
-      return blob;
+      
+      return new Blob([JSON.stringify(backupData)], { type: 'application/json' });
     } catch (error) {
       console.error('Error backing up model files:', error);
       throw error;

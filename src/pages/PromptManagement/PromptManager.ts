@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import { defaultTemplates } from './DefaultTemplates';
 
 export interface PromptTemplate {
   id: string;
@@ -12,10 +13,26 @@ export class PromptManager {
   static async getPromptTemplates(): Promise<PromptTemplate[]> {
     try {
       const result = await browser.storage.local.get(this.STORAGE_KEY);
-      return result[this.STORAGE_KEY] || [];
+      const storedTemplates = result[this.STORAGE_KEY] || [];
+      
+      // If no templates are stored, initialize with default templates
+      if (storedTemplates.length === 0) {
+        await this.initializeDefaultTemplates();
+        return defaultTemplates;
+      }
+      
+      return storedTemplates;
     } catch (error) {
       console.error('Error getting prompt templates:', error);
       return [];
+    }
+  }
+
+  private static async initializeDefaultTemplates(): Promise<void> {
+    try {
+      await browser.storage.local.set({ [this.STORAGE_KEY]: defaultTemplates });
+    } catch (error) {
+      console.error('Error initializing default templates:', error);
     }
   }
 

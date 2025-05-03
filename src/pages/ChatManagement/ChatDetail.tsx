@@ -3,12 +3,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { Document } from '@langchain/core/documents';
 import { Embeddings } from '@langchain/core/embeddings';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
 import { Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
 import browser from 'webextension-polyfill';
+import { createMarkdownComponents } from './MarkdownComponents';
 
 class DummyEmbeddings extends Embeddings {
   async embedQuery(text: string): Promise<number[]> {
@@ -33,6 +36,14 @@ interface ChatRoom {
   createdAt: number;
   lastUpdated: number;
   isVisibleInContextMenu?: boolean;
+}
+
+// Add this type definition for code component props
+interface CodeProps {
+  inline?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  [key: string]: any;
 }
 
 const ChatDetail: React.FC = () => {
@@ -240,21 +251,14 @@ const ChatDetail: React.FC = () => {
       const relevantDocs = await vectorStoreRef.current?.similaritySearch(input, 3);
       const context = relevantDocs?.map(doc => doc.pageContent).join('\n') || '';
 
-      let response = '';
-
-      // System instruction to guide the model's behavior
-      const systemInstruction = `You are a helpful AI assistant. Your responses should:
-      1. NEVER repeat or rephrase the user's question
-      2. Provide direct answers without any preamble
-      3. Be concise and to the point
-      4. Focus on the specific information requested
-      5. If you don't know something, simply say "I don't know"`;
+      // Get system prompt from ModelManager
+      const systemPrompt = ModelManager.getSystemPrompt();
 
       // Use the engine's chat completion API with proper message formatting
       const messages = [
         {
           role: "system",
-          content: systemInstruction
+          content: systemPrompt
         },
         ...updatedMessages
       ].filter(msg => msg.content !== "");
@@ -330,6 +334,10 @@ const ChatDetail: React.FC = () => {
     console.log('Attachment clicked');
   };
 
+  const markdownComponents = createMarkdownComponents({
+    onCopyCode: handleCopyMessage
+  });
+
   if (!room) {
     return <div>Loading...</div>;
   }
@@ -354,7 +362,12 @@ const ChatDetail: React.FC = () => {
                 key={index}
                 className={`message ${message.role === 'user' ? 'message-user' : 'message-assistant'}`}
               >
-                {message.content}
+                <ReactMarkdown 
+                  remarkPlugins={[remarkGfm]}
+                  components={markdownComponents}
+                >
+                  {message.content}
+                </ReactMarkdown>
                 {message.role === 'assistant' && (
                   <div className="message-actions">
                     <button 
@@ -470,14 +483,7 @@ const ChatDetail: React.FC = () => {
                 disabled={isModelLoading || isMessageSending || !input.trim() || !engineRef.current}
                 className="send-button"
               >
-                {isMessageSending ? (
-                  <span className="flex items-center gap-2">
-                    <span className="animate-spin">⚪</span>
-                    Sending...
-                  </span>
-                ) : (
-                  <Send size={16} />
-                )}
+                <Send size={16} />
               </button>
             </div>
           </div>

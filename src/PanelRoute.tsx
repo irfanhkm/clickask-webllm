@@ -1,8 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider, Navigate } from "react-router-dom";
-import { MessageSquare, FileText, Settings } from 'lucide-react';
+import { MessageSquare, FileText, Settings, Code } from 'lucide-react';
 import ModelSelection from "./pages/ModelManagement/ModelSelection";
+import SystemPromptManager from "./pages/ModelManagement/SystemPromptManager";
 import ChatList from "./pages/ChatManagement/ChatList";
 import ChatDetail from "./pages/ChatManagement/ChatDetail";
 import PromptList from "./pages/PromptManagement/PromptList";
@@ -29,6 +30,11 @@ const menuItems: MenuItem[] = [
     name: 'Models',
     path: 'models',
     icon: Settings,
+  },
+  {
+    name: 'System Prompts',
+    path: 'system-prompts',
+    icon: Code,
   },
 ];
 
@@ -57,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: "models",
         element: <ModelSelection />,
+      },
+      {
+        path: "system-prompts",
+        element: <SystemPromptManager />,
       },
       {
         path: "prompts",
