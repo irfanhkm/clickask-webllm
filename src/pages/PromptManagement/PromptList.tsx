@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PromptManager, PromptTemplate } from '../services/PromptManager';
+import { PromptManager, PromptTemplate } from './PromptManager';
 import './PromptList.css';
 
 const PromptList: React.FC = () => {
@@ -24,7 +24,7 @@ const PromptList: React.FC = () => {
   return (
     <div className="prompt-list-container">
       <div className="prompt-list-header">
-        <button onClick={() => navigate('/chats')} className="back-button">
+        <button onClick={() => navigate('/')} className="back-button">
           Back
         </button>
         <h1>Prompt Templates</h1>

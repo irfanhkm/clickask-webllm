@@ -4,11 +4,11 @@ import { CreateMLCEngine } from "@mlc-ai/web-llm";
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import { Document } from '@langchain/core/documents';
 import { Embeddings } from '@langchain/core/embeddings';
-import { getAvailableModels, getModelInfo } from '../services/ModelManager';
+import { getAvailableModels, getModelInfo } from '../ModelManagement/ModelManager';
 import './ChatDetail.css';
-import { ChatManager } from '../services/ChatManager';
-import { ModelManager } from '../services/ModelManager';
-import { PromptManager, PromptTemplate } from '../services/PromptManager';
+import { ChatManager } from './ChatManager';
+import { ModelManager } from '../ModelManagement/ModelManager';
+import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
 import { ArrowLeft } from 'lucide-react';
 
 class DummyEmbeddings extends Embeddings {
@@ -245,7 +245,9 @@ const ChatDetail: React.FC = () => {
       2. Stay focused on the current conversation topic
       3. If you don't know something, say so
       4. Maintain a professional and helpful tone
-      5. Consider the full conversation history when responding`;
+      5. Consider the full conversation history when responding
+      6. Do not repeat or rephrase the user's question in your response
+      7. Get straight to the point with your answer`;
 
       // Use the engine's chat completion API with proper message formatting
       const messages = [

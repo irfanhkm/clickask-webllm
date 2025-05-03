@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CreateMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
 import { useNavigate } from 'react-router-dom';
-import { modelList, getModelInfo } from '../services/ModelManager';
+import { modelList, getModelInfo } from './ModelManager';
 import './ModelSelection.css';
 
 // Extend ModelRecord to include size

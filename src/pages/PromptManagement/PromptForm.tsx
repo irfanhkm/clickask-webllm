@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PromptManager, PromptTemplate } from '../services/PromptManager';
+import { PromptManager, PromptTemplate } from './PromptManager';
 import './PromptForm.css';
 
 const PromptForm: React.FC = () => {

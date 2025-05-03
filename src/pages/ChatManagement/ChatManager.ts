@@ -1,4 +1,4 @@
-import { ChatRoom } from '../types/chat';
+import { ChatRoom } from './types/chat';
 
 export class ChatManager {
   private static DB_NAME = 'chatStorage';

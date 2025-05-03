@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ModelManager } from '../services/ModelManager';
-import { ChatManager } from '../services/ChatManager';
-import { ChatRoom } from '../types/chat';
+import { ModelManager } from '../ModelManagement/ModelManager';
+import { ChatManager } from './ChatManager';
+import { ChatRoom } from './types/chat';
 import { prebuiltAppConfig } from '@mlc-ai/web-llm';
 import './ChatList.css';
 
