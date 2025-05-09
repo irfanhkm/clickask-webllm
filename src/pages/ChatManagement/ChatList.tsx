@@ -31,7 +31,7 @@ const ChatList: React.FC = () => {
   }, []);
 
   const handleCreateChat = async () => {
-    if (!newChatName.trim() || availableModels.length === 0) return;
+    // if (!newChatName.trim() || availableModels.length === 0) return;
 
     // Use the first available model
     const newRoom = await ChatManager.createChatRoom(newChatName, availableModels[0]);

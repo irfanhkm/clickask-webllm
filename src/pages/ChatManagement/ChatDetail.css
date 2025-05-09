@@ -62,6 +62,7 @@
   font-size: 0.875rem;
   line-height: 1.5;
   white-space: pre-wrap;
+  transition: all 0.1s ease-out;
 }
 
 .message-user {
@@ -481,4 +482,21 @@
 
 .copy-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.message-streaming {
+  position: relative;
+}
+
+.message-streaming::after {
+  content: '▋';
+  animation: blink 1s infinite;
+  position: absolute;
+  right: -1rem;
+  bottom: 0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }

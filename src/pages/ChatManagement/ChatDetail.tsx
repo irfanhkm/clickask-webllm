@@ -47,10 +47,17 @@ const ChatDetail: React.FC = () => {
     }
   };
 
-  // Scroll to bottom when messages change
+  // Combined scroll effect for both message changes and streaming
   useEffect(() => {
-    scrollToBottom();
-  }, [room?.messages]);
+    if (isMessageSending) {
+      // During streaming, scroll continuously
+      const interval = setInterval(scrollToBottom, 100);
+      return () => clearInterval(interval);
+    } else {
+      // For regular message changes, scroll once
+      scrollToBottom();
+    }
+  }, [room?.messages, isMessageSending]);
 
   // Initialize engine when model is selected
   const initializeEngine = async (modelId: string) => {
@@ -215,6 +222,16 @@ const ChatDetail: React.FC = () => {
         ...updatedMessages
       ].filter(msg => msg.content !== "");
 
+      // Create a temporary message for streaming
+      const streamingMessage: Message = { role: 'assistant', content: '' };
+      const streamingMessages = [...updatedMessages, streamingMessage];
+      const streamingRoom = {
+        ...updatedRoom,
+        messages: streamingMessages,
+        lastUpdated: Date.now()
+      };
+      setRoom(streamingRoom);
+
       const chunks = await engineRef.current.chat.completions.create({
         messages,
         stream: true,
@@ -229,17 +246,21 @@ const ChatDetail: React.FC = () => {
         const content = chunk.choices[0]?.delta.content;
         if (content !== undefined && content !== null) {
           reply += content;
-        }
-        if (chunk.usage) {
-          console.log(chunk.usage); // only last chunk has usage
+          // Update the streaming message content
+          streamingMessage.content = reply;
+          setRoom({
+            ...streamingRoom,
+            messages: [...updatedMessages, { ...streamingMessage }]
+          });
         }
       }
 
+      // Final update with complete message
       const assistantMessage: Message = { 
         role: 'assistant', 
         content: reply
       };
-      const newMessages = [...updatedRoom.messages, assistantMessage];
+      const newMessages = [...updatedMessages, assistantMessage];
       const newRoom = {
         ...updatedRoom,
         messages: newMessages,
@@ -269,6 +290,7 @@ const ChatDetail: React.FC = () => {
     } finally {
       setIsMessageSending(false);
       scrollToBottom();
+
     }
   };
 
@@ -312,7 +334,9 @@ const ChatDetail: React.FC = () => {
             {room.messages.map((message, index) => (
               <div
                 key={index}
-                className={`message ${message.role === 'user' ? 'message-user' : 'message-assistant'}`}
+                className={`message ${message.role === 'user' ? 'message-user' : 'message-assistant'} ${
+                  index === room.messages.length - 1 && message.role === 'assistant' && isMessageSending ? 'message-streaming' : ''
+                }`}
               >
                 <ReactMarkdown 
                   remarkPlugins={[remarkGfm]}
@@ -320,7 +344,7 @@ const ChatDetail: React.FC = () => {
                 >
                   {message.content}
                 </ReactMarkdown>
-                {message.role === 'assistant' && (
+                {message.role === 'assistant' && !isMessageSending && (
                   <div className="message-actions">
                     <button 
                       className="p-1 hover:bg-gray-100 rounded-full"

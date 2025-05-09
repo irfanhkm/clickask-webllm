@@ -91,12 +91,6 @@ const ModelSelection: React.FC = () => {
     <div className="model-selection">
       <div className="flex justify-between items-center mb-6">
         <h1>Select a Model</h1>
-        <button
-          onClick={() => navigate('/')}
-          className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors"
-        >
-          Back to Home
-        </button>
       </div>
       <div className="model-list">
         {models.map((model) => {
