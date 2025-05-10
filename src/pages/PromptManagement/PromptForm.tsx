@@ -10,19 +10,24 @@ const PromptForm: React.FC = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [validationError, setValidationError] = useState<string>('');
+  const [existingTemplates, setExistingTemplates] = useState<PromptTemplate[]>([]);
 
   useEffect(() => {
     const loadTemplate = async () => {
+      setIsLoading(true);
+      // Load all templates to check for uniqueness
+      const templates = await PromptManager.getPromptTemplates();
+      setExistingTemplates(templates);
+      
       if (id) {
-        setIsLoading(true);
-        const templates = await PromptManager.getPromptTemplates();
         const template = templates.find(t => t.id === id);
         if (template) {
           setTitle(template.title);
           setContent(template.content);
         }
-        setIsLoading(false);
       }
+      setIsLoading(false);
     };
 
     loadTemplate();
@@ -30,14 +35,35 @@ const PromptForm: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!title.trim() || !content.trim()) return;
+    
+    // Validate that the prompt contains at least one placeholder in the format {placeholder}
+    const placeholderRegex = /\{[^}]+\}/;
+    if (!placeholderRegex.test(content)) {
+      setValidationError('Prompt template must contain at least one placeholder in the format {placeholder}');
+      return;
+    }
+    
+    // Validate that the title is unique (excluding the current template if editing)
+    const trimmedTitle = title.trim();
+    const isDuplicate = existingTemplates.some(template => 
+      template.title.toLowerCase() === trimmedTitle.toLowerCase() && 
+      template.id !== id
+    );
+    
+    if (isDuplicate) {
+      setValidationError('A template with this title already exists. Please use a different title.');
+      return;
+    }
+    
+    setValidationError('');
 
     if (id) {
       // Edit mode
-      await PromptManager.savePromptTemplate({ id, title, content });
+      await PromptManager.savePromptTemplate({ id, title: trimmedTitle, content });
       await PromptManager.deletePromptTemplate(id);
     } else {
       // Create mode
-      await PromptManager.savePromptTemplate({ id: Date.now().toString(), title, content });
+      await PromptManager.savePromptTemplate({ id: Date.now().toString(), title: trimmedTitle, content });
     }
 
     navigate('/prompts');
@@ -57,7 +83,10 @@ const PromptForm: React.FC = () => {
             id="title"
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              setValidationError('');
+            }}
             placeholder="Enter template title"
             className="form-input"
           />
@@ -68,10 +97,14 @@ const PromptForm: React.FC = () => {
           <textarea
             id="content"
             value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="Enter template content"
+            onChange={(e) => {
+              setContent(e.target.value);
+              setValidationError('');
+            }}
+            placeholder="Enter template content with at least one {placeholder}"
             className="form-textarea"
           />
+          {validationError && <div className="validation-error">{validationError}</div>}
           <div className="helper-text">
             <span>Tip: Use placeholders like {'{code}'}, {'{error}'}, {'{task}'} to make your prompts reusable.</span>
           </div>
