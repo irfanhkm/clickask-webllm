@@ -6,7 +6,7 @@ import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
-import { Send, Plus, Paperclip, Copy, Settings, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
+import { Send, Plus, Copy, Settings, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
 import browser from 'webextension-polyfill';
 import { createMarkdownComponents } from './MarkdownComponents';
 import { StorageKey } from '../../constants';
@@ -284,9 +284,10 @@ const ChatDetail: React.FC = () => {
     }
 
     // Process input based on selected mode
-    const processedInput = processInput();
+    const userMsg = processInput();
+    console.log(processInput);
     
-    const userMessage: Message = { role: 'user', content: processedInput };
+    const userMessage: Message = { role: 'user', content: userMsg };
     const updatedMessages = [...room.messages, userMessage];
     
     // Update room messages
@@ -469,12 +470,17 @@ const ChatDetail: React.FC = () => {
                   index === room.messages.length - 1 && message.role === 'assistant' && isMessageSending ? 'message-streaming' : ''
                 }`}
               >
-                <ReactMarkdown 
-                  remarkPlugins={[remarkGfm]}
-                  components={markdownComponents}
-                >
-                  {message.content}
-                </ReactMarkdown>
+                {message.role !== 'user' && (
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm]}
+                    components={markdownComponents}
+                  >
+                    {message.content}
+                  </ReactMarkdown>
+                )}
+                {message.role === 'user' && (
+                  <>{message.content}</>
+                )}
                 {message.role === 'assistant' && !isMessageSending && (
                   <div className="message-actions">
                     <button 
@@ -635,7 +641,7 @@ const ChatDetail: React.FC = () => {
               </div>
             )}
             <div className="input-toolbar">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center">
                 <button
                   onClick={() => navigate('/chats')}
                   className="back-button"

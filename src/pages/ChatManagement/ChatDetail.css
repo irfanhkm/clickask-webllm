@@ -93,7 +93,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;
   border-top: 1px solid #e5e7eb;
   background-color: #ffffff;
   z-index: 10;
@@ -403,6 +403,12 @@
   padding: 0.2em 0.4em;
   border-radius: 0.25em;
   font-family: monospace;
+  color: #333; /* Dark text for inline code */
+}
+
+.message-assistant :global(code) {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #e0e0e0; /* Light text for inline code in assistant messages */
 }
 
 .message :global(pre) {
@@ -411,6 +417,14 @@
   background-color: rgba(0, 0, 0, 0.05);
   border-radius: 0.5em;
   overflow-x: auto;
+}
+
+.message-assistant :global(pre) {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.message-assistant :global(pre code) {
+  color: #e0e0e0; /* Light text for code in pre elements in assistant messages */
 }
 
 .message :global(blockquote) {
@@ -454,6 +468,11 @@
   background-color: #1e1e1e;
   border-radius: 0.5em;
   overflow: hidden;
+}
+
+.code-block code {
+  color: #e0e0e0; /* Light gray text color for better readability */
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
 }
 
 .code-header {
@@ -667,13 +686,13 @@
 
 .input-mode-slider {
   display: flex;
-  border: 1px solid #d1d5db;
+  border: 0.5px solid #d1d5db;
   border-radius: 0.375rem;
   overflow: hidden;
   background: #f9fafb;
   margin-left: 0.5rem;
   min-width: 120px;
-  height: 32px;
+  height: 40px;
   align-items: center;
   box-shadow: none;
 }
@@ -687,8 +706,8 @@
   padding: 0.25rem 0.5rem;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
-  border-radius: 0.375rem;
   height: 100%;
+  color: #4b5563;
 }
 
 .slider-option.selected {

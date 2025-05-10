@@ -44,9 +44,9 @@ const PanelLayout: React.FC<PanelLayoutProps> = ({ menuItems }) => {
   return (
     <div className="flex flex-col bg-white">
       {/* Top Navigation Bar */}
-      <div className="fixed w-full z-10 bg-white border-b border-gray-200">
+      <div className="fixed w-full z-10 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
+          <div className="flex justify-between h-12">
             <div className="flex">
               <nav className="ml-6 flex space-x-4">
                 {menuItems.map((item) => {
@@ -74,7 +74,7 @@ const PanelLayout: React.FC<PanelLayoutProps> = ({ menuItems }) => {
 
       {/* Main content */}
       <div className="flex-1 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Outlet />
         </div>
       </div>
