@@ -6,7 +6,7 @@ import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
-import { Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
+import { Send, Plus, Paperclip, Copy, Settings, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
 import browser from 'webextension-polyfill';
 import { createMarkdownComponents } from './MarkdownComponents';
 import { StorageKey } from '../../constants';
@@ -26,6 +26,9 @@ interface ChatRoom {
   isVisibleInContextMenu?: boolean;
 }
 
+// Input mode types
+type InputMode = 'freeText' | 'prompt';
+
 const ChatDetail: React.FC = () => {
   const navigate = useNavigate();
   const { roomId } = useParams<{ roomId: string }>();
@@ -40,6 +43,12 @@ const ChatDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
   const [showSettings, setShowSettings] = useState(false);
+  const [inputMode, setInputMode] = useState<InputMode>('freeText');
+  const [promptInputs, setPromptInputs] = useState<{[key: string]: string}>({});
+  const [showPlaceholders, setShowPlaceholders] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [latestTemplateId, setLatestTemplateId] = useState<string | null>(null);
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   // Scroll to bottom function
   const scrollToBottom = () => {
@@ -149,9 +158,60 @@ const ChatDetail: React.FC = () => {
     loadTemplates();
   }, []);
 
+  // Add this useEffect to watch for input changes in prompt mode
+  useEffect(() => {
+    if (inputMode === 'prompt') {
+      checkForPlaceholders();
+    }
+  }, [input, inputMode]);
+
+  // Update checkForPlaceholders to be more robust
+  const checkForPlaceholders = () => {
+    if (!input) return;
+    
+    // Find all text within curly braces
+    const placeholderRegex = /\{([^{}]+)\}/g;
+    const matches = [...input.matchAll(placeholderRegex)];
+    
+    if (matches.length > 0) {
+      // Extract unique placeholder names
+      const uniquePlaceholders = [...new Set(matches.map(match => match[1]))];
+      
+      // Initialize empty values for each placeholder
+      const newInputs: {[key: string]: string} = {};
+      uniquePlaceholders.forEach((placeholderName, index) => {
+        newInputs[`input${index}`] = '';
+      });
+      
+      setPromptInputs(newInputs);
+    } else {
+      // Clear inputs if no placeholders found
+      setPromptInputs({});
+    }
+  };
+
+  // Update input and check for placeholders
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newInput = e.target.value;
+    setInput(newInput);
+    
+    // If in prompt mode, check for placeholders
+    if (inputMode === 'prompt') {
+      checkForPlaceholders();
+    }
+  };
+
   const handleTemplateSelect = (templateId: string) => {
     const template = templates.find(t => t.id === templateId);
     if (template) {
+      setInput(template.content);
+      setLatestTemplateId(templateId);
+      // First set the input mode to prompt if template has placeholders
+      const hasPlaceholders = template.content.match(/\{([^{}]+)\}/);
+      if (hasPlaceholders) {
+        setInputMode('prompt');
+      }
+      // Then set the input content
       setInput(template.content);
     }
   };
@@ -187,13 +247,46 @@ const ChatDetail: React.FC = () => {
     }
   };
 
+  // Process input based on selected mode
+  const processInput = (): string => {
+    if (inputMode === 'freeText') {
+      return input;
+    } else {
+      // Prompt mode - replace placeholders with user inputs
+      let processedInput = input;
+      Object.entries(promptInputs).forEach(([key, value], index) => {
+        // Find the placeholder at this index
+        const placeholderRegex = /\{([^{}]+)\}/g;
+        const matches = [...input.matchAll(placeholderRegex)];
+        
+        if (matches[index]) {
+          const placeholder = matches[index][0]; // Full match like {placeholderName}
+          processedInput = processedInput.replace(placeholder, value);
+        }
+      });
+      return processedInput;
+    }
+  };
+
   const handleSend = async () => {
+    setValidationError(null);
     if (!input.trim() || !engineRef.current || !room) {
       console.error('Cannot send message: engine not initialized or missing data');
       return;
     }
+    // Validation for prompt mode: all placeholders must be filled
+    if (inputMode === 'prompt') {
+      const emptyKey = Object.entries(promptInputs).find(([_, v]) => !v.trim());
+      if (emptyKey) {
+        setValidationError('Please fill in all placeholder values before sending.');
+        return;
+      }
+    }
 
-    const userMessage: Message = { role: 'user', content: input };
+    // Process input based on selected mode
+    const processedInput = processInput();
+    
+    const userMessage: Message = { role: 'user', content: processedInput };
     const updatedMessages = [...room.messages, userMessage];
     
     // Update room messages
@@ -207,7 +300,17 @@ const ChatDetail: React.FC = () => {
     // Save to ChatManager
     await ChatManager.updateChat(room.id, updatedRoom);
 
-    setInput('');
+    // After sending in prompt mode, reset input to latest template or default
+    if (inputMode === 'prompt') {
+      if (latestTemplateId) {
+        const latestTemplate = templates.find(t => t.id === latestTemplateId);
+        setInput(latestTemplate ? latestTemplate.content : 'Write a {type} about {topic} with a {tone} tone.');
+      } else {
+        setInput('Write a {type} about {topic} with a {tone} tone.');
+      }
+    } else {
+      setInput('');
+    }
     setIsMessageSending(true);
 
     try {
@@ -291,7 +394,6 @@ const ChatDetail: React.FC = () => {
     } finally {
       setIsMessageSending(false);
       scrollToBottom();
-
     }
   };
 
@@ -307,6 +409,39 @@ const ChatDetail: React.FC = () => {
   const handleAttachmentClick = () => {
     // TODO: Implement attachment functionality
     console.log('Attachment clicked');
+  };
+
+  const handleInputModeChange = (mode: InputMode) => {
+    // Check for unsaved input in current mode
+    let hasUnsaved = false;
+    if (inputMode === 'freeText' && input.trim()) {
+      hasUnsaved = true;
+    } else if (inputMode === 'prompt' && Object.values(promptInputs).some(v => v.trim())) {
+      hasUnsaved = true;
+    }
+    if (hasUnsaved) {
+      if (!window.confirm('You have unsaved input. Changing mode will clear it. Continue?')) {
+        return;
+      }
+    }
+    setInputMode(mode);
+    setInput(''); // Clear textarea/input when changing mode
+    setPromptInputs({});
+    setValidationError(null);
+    // If switching to prompt mode, set default example prompt
+    if (mode === 'prompt') {
+      setInput('Write a {type} about {topic} with a {tone} tone.');
+      setTimeout(() => {
+        checkForPlaceholders();
+      }, 0);
+    }
+  };
+
+  const handlePromptInputChange = (key: string, value: string) => {
+    setPromptInputs(prev => ({
+      ...prev,
+      [key]: value
+    }));
   };
 
   const markdownComponents = createMarkdownComponents({
@@ -388,47 +523,122 @@ const ChatDetail: React.FC = () => {
                   )}
                 </div>
               </div>
-
-              <div className="settings-section">
-                <h3>Template Settings</h3>
-                <div className="template-selector">
-                  <select 
-                    onChange={(e) => handleTemplateSelect(e.target.value)}
-                    value=""
-                    className="template-select"
-                  >
-                    <option value="">Select a template</option>
-                    {templates.map(template => (
-                      <option key={template.id} value={template.id}>
-                        {template.title}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    onClick={() => navigate('/prompts')}
-                    className="manage-templates-button"
-                  >
-                    Manage Templates
-                  </button>
-                </div>
-              </div>
             </div>
           )}
           <div className="input-area">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSend();
-                }
-              }}
-              placeholder="Ask me anything..."
-              disabled={isModelLoading || isMessageSending || !engineRef.current}
-              rows={2}
-            />
+            {validationError && (
+              <div className="validation-error">{validationError}</div>
+            )}
+            {inputMode === 'freeText' ? (
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSend();
+                  }
+                }}
+                placeholder="Ask me anything..."
+                disabled={isModelLoading || isMessageSending || !engineRef.current}
+                rows={3}
+              />
+            ) : (
+              <div className="prompt-input-container">
+                <div className="prompt-display">
+                  {isEditing ? (
+                    <textarea
+                      value={input}
+                      onChange={handleInputChange}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          setIsEditing(false);
+                          checkForPlaceholders();
+                        }
+                      }}
+                      onBlur={() => {
+                        setIsEditing(false);
+                        checkForPlaceholders();
+                      }}
+                      className="prompt-edit-textarea"
+                      rows={3}
+                      autoFocus
+                    />
+                  ) : (
+                    <div className="prompt-text">
+                      {input.split(/(\{[^{}]+\})/).map((part, index) => {
+                        // Check if this part is a placeholder
+                        const isPlaceholder = part.match(/^\{[^{}]+\}$/);
+                        if (isPlaceholder) {
+                          // Find the index of this placeholder
+                          const placeholderRegex = /\{([^{}]+)\}/g;
+                          const matches = [...input.matchAll(placeholderRegex)];
+                          const placeholderIndex = matches.findIndex(match => match[0] === part);
+                          
+                          // Get the value for this placeholder
+                          const placeholderKey = `input${placeholderIndex}`;
+                          const placeholderValue = promptInputs[placeholderKey] || '';
+                          
+                          return (
+                            <span key={index} className="prompt-placeholder">
+                              {placeholderValue || part}
+                            </span>
+                          );
+                        } else {
+                          return <span key={index}>{part}</span>;
+                        }
+                      })}
+                    </div>
+                  )}
+                </div>
+                <div className="prompt-actions prompt-actions-row">
+                  <button 
+                    type="button" 
+                    className="edit-prompt-button icon-tooltip-btn"
+                    onClick={() => setIsEditing(true)}
+                    aria-label="Edit prompt"
+                  >
+                    <Pencil size={16} />
+                    <span className="icon-tooltip">Edit prompt</span>
+                  </button>
+                  {Object.keys(promptInputs).length > 0 && (
+                    <button
+                      type="button"
+                      className="toggle-placeholders-button icon-tooltip-btn"
+                      onClick={() => setShowPlaceholders(!showPlaceholders)}
+                      aria-label={showPlaceholders ? 'Hide Inputs' : 'Show Inputs'}
+                    >
+                      {showPlaceholders ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                      <span className="icon-tooltip">{showPlaceholders ? 'Hide Inputs' : 'Show Inputs'}</span>
+                    </button>
+                  )}
+                </div>
+                {showPlaceholders && Object.keys(promptInputs).length > 0 && (
+                  <div className="prompt-inputs">
+                    <h4>Placeholder Values:</h4>
+                    {Object.entries(promptInputs).map(([key, value], index) => {
+                      // Find the placeholder name at this index
+                      const placeholderRegex = /\{([^{}]+)\}/g;
+                      const matches = [...input.matchAll(placeholderRegex)];
+                      const placeholderName = matches[index] ? matches[index][1] : `Placeholder ${index + 1}`;
+                      
+                      return (
+                        <div key={key} className="prompt-input-field">
+                          <label>{placeholderName}:</label>
+                          <input
+                            type="text"
+                            value={value}
+                            onChange={(e) => handlePromptInputChange(key, e.target.value)}
+                            placeholder={`Value for ${placeholderName}`}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            )}
             <div className="input-toolbar">
               <div className="flex items-center gap-2">
                 <button
@@ -451,6 +661,39 @@ const ChatDetail: React.FC = () => {
                 >
                   <Paperclip size={16} />
                 </button>
+                <div className="input-mode-slider-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <div className="input-mode-slider">
+                    <button
+                      type="button"
+                      className={`slider-option${inputMode === 'freeText' ? ' selected' : ''}`}
+                      onClick={() => handleInputModeChange('freeText')}
+                    >
+                      Text
+                    </button>
+                    <button
+                      type="button"
+                      className={`slider-option${inputMode === 'prompt' ? ' selected' : ''}`}
+                      onClick={() => handleInputModeChange('prompt')}
+                    >
+                      Prompt
+                    </button>
+                  </div>
+                  {(inputMode === 'prompt' && !isModelLoading) && (
+                    <select 
+                      onChange={(e) => handleTemplateSelect(e.target.value)}
+                      value=""
+                      className="template-select toolbar-template-select"
+                      style={{ minWidth: 140 }}
+                    >
+                      <option value="">Select a template</option>
+                      {templates.map(template => (
+                        <option key={template.id} value={template.id}>
+                          {template.title}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
               </div>
               {isModelLoading && (
                 <span className="text-sm text-gray-500">Initializing model...</span>

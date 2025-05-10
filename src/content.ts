@@ -18,8 +18,8 @@ function createFloatingButton() {
   button.style.position = 'fixed';
   button.style.bottom = '20px';
   button.style.right = '20px';
-  button.style.width = '50px';
-  button.style.height = '50px';
+  button.style.width = '70px';
+  button.style.height = '70px';
   button.style.borderRadius = '50%';
   button.style.backgroundColor = '#4285f4';
   button.style.color = 'white';
