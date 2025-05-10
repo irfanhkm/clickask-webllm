@@ -108,11 +108,10 @@ const ChatList: React.FC = () => {
                 {room.messages[room.messages.length - 1]?.content.substring(0, 30) || 'No messages yet'}
                 ...
               </span>
-              <p className="text-sm text-gray-500">
-                Model: {getModelDisplayName(room.modelId)}
-              </p>
             </div>
             <span className="room-date">
+              {new Date(room.createdAt).toLocaleTimeString()}
+              <br/>
               {new Date(room.createdAt).toLocaleDateString()}
             </span>
           </div>

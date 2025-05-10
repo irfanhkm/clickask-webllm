@@ -51,6 +51,7 @@ const PromptList: React.FC = () => {
           </div>
         </div>
       )}
+      <br/>
 
       {showSystemPrompt ? (
         <div className="system-prompt-section">

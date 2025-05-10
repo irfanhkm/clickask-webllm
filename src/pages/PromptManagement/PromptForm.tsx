@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PromptManager, PromptTemplate } from './PromptManager';
+import PromptGuidelines from './PromptGuidelines';
 import './PromptForm.css';
 
 const PromptForm: React.FC = () => {
@@ -48,14 +49,8 @@ const PromptForm: React.FC = () => {
 
   return (
     <div className="prompt-form-container">
-      <div className="prompt-form-header">
-        <button onClick={() => navigate('/prompts')} className="back-button">
-          Back
-        </button>
-        <h1>{id ? 'Edit Prompt Template' : 'New Prompt Template'}</h1>
-      </div>
-
       <div className="prompt-form">
+        <PromptGuidelines />
         <div className="form-group">
           <label htmlFor="title">Title</label>
           <input
@@ -77,6 +72,9 @@ const PromptForm: React.FC = () => {
             placeholder="Enter template content"
             className="form-textarea"
           />
+          <div className="helper-text">
+            <span>Tip: Use placeholders like {'{code}'}, {'{error}'}, {'{task}'} to make your prompts reusable.</span>
+          </div>
         </div>
 
         <div className="form-buttons">

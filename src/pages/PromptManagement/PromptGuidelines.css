@@ -1,0 +1,105 @@
+.prompt-guidelines {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.guidelines-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: #e9ecef;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.guidelines-header:hover {
+  background-color: #dee2e6;
+}
+
+.guidelines-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+}
+
+.expand-icon {
+  font-size: 12px;
+  color: #6c757d;
+}
+
+.guidelines-content {
+  padding: 16px;
+  border-top: 1px solid #dee2e6;
+}
+
+.guidelines-content p {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #495057;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.guidelines-content h4 {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.guidelines-content h5 {
+  margin-top: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.guidelines-content ul {
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding-left: 20px;
+}
+
+.guidelines-content li {
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #495057;
+}
+
+.guidelines-content code {
+  background-color: #e9ecef;
+  padding: 2px 4px;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #e83e8c;
+}
+
+.placeholder-examples {
+  margin: 12px 0;
+}
+
+.example {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.example pre {
+  background-color: #f8f9fa;
+  padding: 8px;
+  border-radius: 4px;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 13px;
+  margin: 8px 0;
+  color: #212529;
+} 

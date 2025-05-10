@@ -12,7 +12,7 @@
   composes: page-content;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   max-width: 800px;
   margin: 0 auto;
   width: 100%;
@@ -49,12 +49,24 @@
   width: 100%;
 }
 
+.helper-text {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.helper-text span {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+  border-left: 3px solid #3b82f6;
+}
+
 .form-buttons {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
   gap: 0.75rem;
-  margin-top: 1rem;
 }
 
 .cancel-button {
@@ -68,4 +80,9 @@
 .save-button:disabled {
   background: #9ca3af;
   cursor: not-allowed;
+}
+
+/* Add spacing between guidelines and form fields */
+.prompt-guidelines {
+  margin-bottom: 1rem;
 } 

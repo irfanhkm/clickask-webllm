@@ -90,7 +90,7 @@ const ModelSelection: React.FC = () => {
 
   return (
     <div className="model-selection">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex justify-between items-center">
         <h1>Select a Model</h1>
       </div>
       <div className="model-list">
