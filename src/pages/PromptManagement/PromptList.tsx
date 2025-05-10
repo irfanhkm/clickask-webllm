@@ -7,7 +7,7 @@ import './PromptList.css';
 const PromptList: React.FC = () => {
   const navigate = useNavigate();
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
-  const [systemPrompt, setSystemPrompt] = useState<string>(DEFAULT_SYSTEM_PROMPT);
+  const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
 
   useEffect(() => {
@@ -26,7 +26,8 @@ const PromptList: React.FC = () => {
 
   const handleDeleteTemplate = async (id: string) => {
     await PromptManager.deletePromptTemplate(id);
-    loadTemplates();
+    // Update state immediately by filtering out the deleted template
+    setTemplates(templates.filter(template => template.id !== id));
   };
 
   const handleSaveSystemPrompt = () => {

@@ -22,18 +22,26 @@
     "tabs",
     "storage",
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "windows"
   ],
   "{{firefox}}.permissions": [
     "tabs",
     "storage",
     "contextMenus",
-    "activeTab"
+    "activeTab",
+    "windows"
   ],
   "background": {
     "{{chrome}}.service_worker": "src/background.ts",
     "{{firefox}}.scripts": ["src/background.ts"]
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["src/content.ts"]
+    }
+  ],
   "{{firefox}}.browser_specific_settings": {
     "gecko": {
       "id": "clickask-webllm@example.com"

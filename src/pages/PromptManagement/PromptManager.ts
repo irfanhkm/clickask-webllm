@@ -9,14 +9,19 @@ export interface PromptTemplate {
 
 export class PromptManager {
   private static STORAGE_KEY = 'promptTemplates';
+  private static EMPTY_IDENTIFIER = '-';
 
   static async getPromptTemplates(): Promise<PromptTemplate[]> {
     try {
       const result = await browser.storage.local.get(this.STORAGE_KEY);
-      const storedTemplates = result[this.STORAGE_KEY] || [];
+      const storedTemplates = result[this.STORAGE_KEY];
+
+      if (storedTemplates === this.EMPTY_IDENTIFIER) {
+        return [];
+      }
       
-      // If no templates are stored, initialize with default templates
-      if (storedTemplates.length === 0) {
+      // If templates have never been initialized, are empty
+      if (storedTemplates === undefined) {
         await this.initializeDefaultTemplates();
         return defaultTemplates;
       }
@@ -58,7 +63,12 @@ export class PromptManager {
     try {
       const templates = await this.getPromptTemplates();
       const filteredTemplates = templates.filter(t => t.id !== id);
-      await browser.storage.local.set({ [this.STORAGE_KEY]: filteredTemplates });
+      if (filteredTemplates.length === 0) {
+        await browser.storage.local.set({ [this.STORAGE_KEY]: this.EMPTY_IDENTIFIER });
+      } else {
+        await browser.storage.local.set({ [this.STORAGE_KEY]: filteredTemplates });
+      }      
+      
     } catch (error) {
       console.error('Error deleting prompt template:', error);
       throw error;
