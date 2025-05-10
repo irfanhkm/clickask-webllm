@@ -1,0 +1,34 @@
+:root {
+  /* Container padding */
+  --container-padding: 0;
+  
+  /* Card gap */
+  --card-gap: 1rem;
+  
+  /* Card padding */
+  --card-padding: 1rem;
+  
+  /* Border radius */
+  --border-radius: 12px;
+  
+  /* Shadow */
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --card-shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.12);
+  
+  /* Border */
+  --card-border: 1px solid #e5e7eb;
+  
+  /* Colors */
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --success-color: #10b981;
+  --success-hover: #059669;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+  --text-primary: #1a1a1a;
+  --text-secondary: #4b5563;
+  --text-muted: #6b7280;
+  --bg-light: #f3f4f6;
+  --bg-light-hover: #e5e7eb;
+  --bg-white: #ffffff;
+} 

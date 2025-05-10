@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { PromptManager, PromptTemplate } from './PromptManager';
 import { DEFAULT_SYSTEM_PROMPT } from '../ModelManagement/ModelManager';
 import { StorageKey } from '../../constants';
+import { Edit, Trash2, Plus, Info } from 'lucide-react';
 import './PromptList.css';
 
 const PromptList: React.FC = () => {
@@ -40,13 +41,13 @@ const PromptList: React.FC = () => {
     <div className="prompt-list-container">
       {!showSystemPrompt && (
         <div className="prompt-list-header">
-          <h1>Prompt Templates</h1>
           <div className="header-buttons">
             <button onClick={() => setShowSystemPrompt(!showSystemPrompt)} className="add-button">
               {showSystemPrompt ? 'Hide System Prompt' : 'Edit System Prompt'}
             </button>
             <button onClick={() => navigate('/prompts/new')} className="add-button">
-              Add Template
+              <Plus size={16} />
+              <span>Add Template</span>
             </button>
           </div>
         </div>
@@ -75,24 +76,34 @@ const PromptList: React.FC = () => {
       ) : (
         <div className="templates-list">
           {templates.map((template) => (
-            <div key={template.id} className="template-item">
-              <div className="template-info">
-                <h3>{template.title}</h3>
-                <p>{template.content}</p>
-              </div>
-              <div className="template-actions">
-                <button
-                  onClick={() => navigate(`/prompts/edit/${template.id}`)}
-                  className="edit-button"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => handleDeleteTemplate(template.id)}
-                  className="delete-button"
-                >
-                  Delete
-                </button>
+            <div key={template.id} className="template-card">
+              <div className="template-card-content">
+                <div className="template-card-header">
+                  <div className="template-card-title">
+                    <h3>{template.title}</h3>
+                  </div>
+                  <div className="template-card-actions">
+                    <button
+                      onClick={() => navigate(`/prompts/edit/${template.id}`)}
+                      className="action-button"
+                    >
+                      <Edit size={16} />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      onClick={() => handleDeleteTemplate(template.id)}
+                      className="action-button danger"
+                    >
+                      <Trash2 size={16} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+                <div className="template-card-info">
+                  <div className="template-description">
+                    <p>{template.content}</p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

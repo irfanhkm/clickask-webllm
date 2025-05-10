@@ -5,6 +5,7 @@ import { ChatManager } from './ChatManager';
 import { ChatRoom } from './types/chat';
 import { prebuiltAppConfig } from '@mlc-ai/web-llm';
 import { useToggle } from '../../hooks/useToggle';
+import { Plus, Search, MessageSquare, Clock } from 'lucide-react';
 import './ChatList.css';
 
 const ChatList: React.FC = () => {
@@ -58,36 +59,45 @@ const ChatList: React.FC = () => {
 
   return (
     <div className="chat-list-container">
-      <div className="flex flex row mb-4 gap-4">
-        <button
-            onClick={() => toggleCreating()}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            New Chat
-        </button>
-        
-        <input
+      <div className="search-container">
+        <div className="search-input-wrapper">
+          <Search size={16} className="search-icon" />
+          <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search chats..."
             className="search-input"
           />
+          <button
+            onClick={() => toggleCreating()}
+            className="add-button"
+          >
+            <Plus size={16} />
+            <span>New Chat</span>
+          </button>
+        </div>
       </div>
 
       {isCreating && (
-        <div className="mb-4 p-4 border rounded">
+        <div className="create-chat-section">
           <input
             type="text"
             value={newChatName}
             onChange={(e) => setNewChatName(e.target.value)}
             placeholder="Enter chat name"
-            className="w-full p-2 border rounded mb-2"
+            className="chat-name-input"
           />
-          <div className="flex justify-end">
+          <div className="create-chat-actions">
+            <button
+              onClick={() => toggleCreating()}
+              className="cancel-button"
+            >
+              Cancel
+            </button>
             <button
               onClick={handleCreateChat}
-              className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              className="create-button"
             >
               Create
             </button>
@@ -95,29 +105,40 @@ const ChatList: React.FC = () => {
         </div>
       )}
 
-      <div className="room-list">
+      <div className="chat-cards-list">
         {filteredRooms.map(room => (
           <div
             key={room.id}
-            className="room-item"
+            className="chat-card"
             onClick={() => navigate(`/chats/${room.id}`)}
           >
-            <div className="room-info">
-              <span className="room-name">{room.name}</span>
-              <span className="room-preview">
-                {room.messages[room.messages.length - 1]?.content.substring(0, 30) || 'No messages yet'}
-                ...
-              </span>
+            <div className="chat-card-content">
+              <div className="chat-card-header">
+                <div className="chat-card-title">
+                  <h3>{room.name}</h3>
+                </div>
+                <div className="chat-card-date">
+                  <Clock size={14} />
+                  <span>{new Date(room.createdAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+              <div className="chat-card-info">
+                <div className="chat-preview">
+                  <MessageSquare size={14} className="chat-icon" />
+                  <span>
+                    {room.messages[room.messages.length - 1]?.content.substring(0, 50) || 'No messages yet'}
+                    {room.messages[room.messages.length - 1]?.content.length > 50 ? '...' : ''}
+                  </span>
+                </div>
+                <div className="chat-model">
+                  <span className="model-tag">{getModelDisplayName(room.modelId)}</span>
+                </div>
+              </div>
             </div>
-            <span className="room-date">
-              {new Date(room.createdAt).toLocaleTimeString()}
-              <br/>
-              {new Date(room.createdAt).toLocaleDateString()}
-            </span>
           </div>
         ))}
         {filteredRooms.length === 0 && (
-          <div className="no-rooms">
+          <div className="no-chats">
             {searchQuery ? 'No matching chat rooms found' : 'No chat rooms yet'}
           </div>
         )}
