@@ -8,6 +8,48 @@ export enum BrowserAction {
 // Other constants
 export const BROWSER_CONTEXT_PROMPT_ID = 'prompt-template-';
 
+// Storage types
+export enum StorageType {
+  LOCAL = 'local',
+  SESSION = 'session',
+  SYNC = 'sync'
+}
+
+// Browser storage keys (browser.storage.local)
+export enum BrowserStorageKey {
+  // Chat related
+  CHATS = 'chats',
+  CURRENT_CHAT_ID = 'currentChatId',
+  
+  // Model related
+  DOWNLOADED_MODELS = 'downloadedModels',
+  
+  // Prompt related
+  PROMPT_TEMPLATES = 'promptTemplates'
+}
+
+// Local storage keys (localStorage)
+export enum LocalStorageKey {
+  GLOBAL_SYSTEM_PROMPT = 'globalSystemPrompt',
+  DOWNLOADED_MODELS = 'downloadedModels'
+}
+
+// IndexedDB keys
+export enum IndexedDBKey {
+  DB_NAME = 'chatStorage',
+  STORE_NAME = 'chatRooms'
+}
+
+// For backward compatibility
 export enum StorageKey {
-    // TODO add storage key listed here.
+  // Chat related
+  CHATS = BrowserStorageKey.CHATS,
+  CURRENT_CHAT_ID = BrowserStorageKey.CURRENT_CHAT_ID,
+  
+  // Model related
+  DOWNLOADED_MODELS = BrowserStorageKey.DOWNLOADED_MODELS,
+  
+  // Prompt related
+  PROMPT_TEMPLATES = BrowserStorageKey.PROMPT_TEMPLATES,
+  GLOBAL_SYSTEM_PROMPT = LocalStorageKey.GLOBAL_SYSTEM_PROMPT
 }

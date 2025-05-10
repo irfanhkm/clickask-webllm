@@ -1,5 +1,6 @@
 import { CreateMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
 import browser from 'webextension-polyfill';
+import { StorageKey } from '../../constants';
 
 export interface ModelInfo {
   name: string;
@@ -34,9 +35,9 @@ export const modelList: ModelInfo[] = [
 
 export const getAvailableModels = async (): Promise<string[]> => {
   try {
-    const result = await browser.storage.local.get('downloadedModels');
-    if (result.downloadedModels) {
-      const models: ModelInfo[] = result.downloadedModels;
+    const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+    if (result[StorageKey.DOWNLOADED_MODELS]) {
+      const models: ModelInfo[] = result[StorageKey.DOWNLOADED_MODELS];
       return models.map(model => model.name);
     }
     return [];
@@ -48,9 +49,9 @@ export const getAvailableModels = async (): Promise<string[]> => {
 
 export const getModelInfo = async (modelId: string): Promise<ModelInfo | undefined> => {
   try {
-    const result = await browser.storage.local.get('downloadedModels');
-    if (result.downloadedModels) {
-      const models: ModelInfo[] = result.downloadedModels;
+    const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+    if (result[StorageKey.DOWNLOADED_MODELS]) {
+      const models: ModelInfo[] = result[StorageKey.DOWNLOADED_MODELS];
       const downloadedModel = models.find(m => m.name === modelId);
       if (downloadedModel) return downloadedModel;
     }
@@ -80,9 +81,9 @@ export class ModelManager {
 
   private async loadDownloadedModels() {
     try {
-      const result = await browser.storage.local.get('downloadedModels');
-      if (result.downloadedModels) {
-        this.downloadedModels = result.downloadedModels;
+      const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+      if (result[StorageKey.DOWNLOADED_MODELS]) {
+        this.downloadedModels = result[StorageKey.DOWNLOADED_MODELS];
       }
     } catch (error) {
       console.error('Error loading downloaded models:', error);
@@ -94,7 +95,7 @@ export class ModelManager {
   }
 
   static getSystemPrompt(): string {
-    return localStorage.getItem('globalSystemPrompt') || DEFAULT_SYSTEM_PROMPT;
+    return localStorage.getItem(StorageKey.GLOBAL_SYSTEM_PROMPT) || DEFAULT_SYSTEM_PROMPT;
   }
 
   static async initializeEngine(modelId: string): Promise<any> {
@@ -115,7 +116,7 @@ export class ModelManager {
 
   static async getAvailableModels(): Promise<string[]> {
     try {
-      const downloadedModels = JSON.parse(localStorage.getItem('downloadedModels') || '[]');
+      const downloadedModels = JSON.parse(localStorage.getItem(StorageKey.DOWNLOADED_MODELS) || '[]');
       return downloadedModels.map((model: ModelInfo) => model.name);
     } catch (error) {
       console.error('Error getting available models:', error);
@@ -125,9 +126,9 @@ export class ModelManager {
 
   static async getModelInfo(modelId: string): Promise<ModelInfo | undefined> {
     try {
-      const result = await browser.storage.local.get('downloadedModels');
-      if (result.downloadedModels) {
-        const models: ModelInfo[] = result.downloadedModels;
+      const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+      if (result[StorageKey.DOWNLOADED_MODELS]) {
+        const models: ModelInfo[] = result[StorageKey.DOWNLOADED_MODELS];
         const downloadedModel = models.find(m => m.name === modelId);
         if (downloadedModel) return downloadedModel;
       }
@@ -144,12 +145,12 @@ export class ModelManager {
       const modelInfo = modelList.find(m => m.name === modelId);
       if (!modelInfo) return;
 
-      const result = await browser.storage.local.get('downloadedModels');
-      let models: ModelInfo[] = result.downloadedModels || [];
+      const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+      let models: ModelInfo[] = result[StorageKey.DOWNLOADED_MODELS] || [];
       
       if (!models.some(m => m.name === modelId)) {
         models.push(modelInfo);
-        await browser.storage.local.set({ downloadedModels: models });
+        await browser.storage.local.set({ [StorageKey.DOWNLOADED_MODELS]: models });
       }
     } catch (error) {
       console.error('Error adding downloaded model:', error);

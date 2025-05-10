@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PromptManager, PromptTemplate } from './PromptManager';
 import { DEFAULT_SYSTEM_PROMPT } from '../ModelManagement/ModelManager';
+import { StorageKey } from '../../constants';
 import './PromptList.css';
 
 const PromptList: React.FC = () => {
@@ -13,7 +14,7 @@ const PromptList: React.FC = () => {
   useEffect(() => {
     loadTemplates();
     // Load the current system prompt from localStorage
-    const savedPrompt = localStorage.getItem('globalSystemPrompt');
+    const savedPrompt = localStorage.getItem(StorageKey.GLOBAL_SYSTEM_PROMPT);
     if (savedPrompt) {
       setSystemPrompt(savedPrompt);
     }
@@ -31,7 +32,7 @@ const PromptList: React.FC = () => {
   };
 
   const handleSaveSystemPrompt = () => {
-    localStorage.setItem('globalSystemPrompt', systemPrompt.trim());
+    localStorage.setItem(StorageKey.GLOBAL_SYSTEM_PROMPT, systemPrompt.trim());
     setShowSystemPrompt(false);
   };
 

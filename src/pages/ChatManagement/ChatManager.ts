@@ -1,5 +1,6 @@
 import { ChatRoom } from './types/chat';
 import browser from 'webextension-polyfill';
+import { StorageKey } from '../../constants';
 
 export class ChatManager {
   private static DB_NAME = 'chatStorage';
@@ -106,10 +107,10 @@ export class ChatManager {
 
       // Sync with browser.storage.local
       try {
-        const result = await browser.storage.local.get('chats');
-        const chats = result.chats || {};
+        const result = await browser.storage.local.get(StorageKey.CHATS);
+        const chats = result[StorageKey.CHATS] || {};
         chats[id] = updatedRoom;
-        await browser.storage.local.set({ chats });
+        await browser.storage.local.set({ [StorageKey.CHATS]: chats });
       } catch (error) {
         console.error('Error syncing with browser.storage.local:', error);
       }

@@ -9,6 +9,7 @@ import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager
 import { Send, Plus, Paperclip, Copy, Settings } from 'lucide-react';
 import browser from 'webextension-polyfill';
 import { createMarkdownComponents } from './MarkdownComponents';
+import { StorageKey } from '../../constants';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -81,7 +82,7 @@ const ChatDetail: React.FC = () => {
   useEffect(() => {
     const initData = async () => {
       // Only get downloaded models
-      const downloadedModels = localStorage.getItem('downloadedModels');
+      const downloadedModels = localStorage.getItem(StorageKey.DOWNLOADED_MODELS);
       if (downloadedModels) {
         const models = JSON.parse(downloadedModels);
         setAvailableModels(models.map((m: any) => m.name));
@@ -110,7 +111,7 @@ const ChatDetail: React.FC = () => {
         const room = await ChatManager.getChatRoom(roomId);
         if (room) {
           // Set current chat ID in storage for context menu
-          await browser.storage.local.set({ currentChatId: roomId });
+          await browser.storage.local.set({ [StorageKey.CURRENT_CHAT_ID]: roomId });
           
           setRoom({
             ...room,

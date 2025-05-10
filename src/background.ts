@@ -1,6 +1,6 @@
 import browser from "webextension-polyfill";
 import { PromptManager, PromptTemplate } from "./pages/PromptManagement/PromptManager";
-import { BROWSER_CONTEXT_PROMPT_ID, BrowserAction } from "./constants";
+import { BROWSER_CONTEXT_PROMPT_ID, BrowserAction, StorageKey } from "./constants";
 
 // Handle Chrome side panel
 if (chrome?.sidePanel) {
@@ -63,8 +63,8 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       
       if (selectedTemplate) {
         // Get the current chat ID from storage
-        const result = await browser.storage.local.get("currentChatId");
-        const currentChatId = result.currentChatId;
+        const result = await browser.storage.local.get(StorageKey.CURRENT_CHAT_ID);
+        const currentChatId = result[StorageKey.CURRENT_CHAT_ID];
         
         if (chrome?.sidePanel && tab.windowId) {
           // Send a message to the content script to open the side panel
@@ -106,7 +106,7 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
 
 // Listen for changes to prompt templates to update the context menu
 browser.storage.onChanged.addListener((changes, areaName) => {
-  if (areaName === "local" && changes.promptTemplates) {
+  if (areaName === "local" && changes[StorageKey.PROMPT_TEMPLATES]) {
     createPromptContextMenu();
   }
 });

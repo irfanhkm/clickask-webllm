@@ -1,5 +1,6 @@
 import browser from 'webextension-polyfill';
 import { defaultTemplates } from './DefaultTemplates';
+import { StorageKey } from '../../constants';
 
 export interface PromptTemplate {
   id: string;
@@ -8,7 +9,7 @@ export interface PromptTemplate {
 }
 
 export class PromptManager {
-  private static STORAGE_KEY = 'promptTemplates';
+  private static STORAGE_KEY = StorageKey.PROMPT_TEMPLATES;
   private static EMPTY_IDENTIFIER = '-';
 
   static async getPromptTemplates(): Promise<PromptTemplate[]> {
