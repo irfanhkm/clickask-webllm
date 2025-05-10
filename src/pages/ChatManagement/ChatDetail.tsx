@@ -285,7 +285,6 @@ const ChatDetail: React.FC = () => {
 
     // Process input based on selected mode
     const userMsg = processInput();
-    console.log(processInput);
     
     const userMessage: Message = { role: 'user', content: userMsg };
     const updatedMessages = [...room.messages, userMessage];
