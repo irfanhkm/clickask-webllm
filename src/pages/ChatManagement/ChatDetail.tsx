@@ -406,11 +406,6 @@ const ChatDetail: React.FC = () => {
     }
   };
 
-  const handleAttachmentClick = () => {
-    // TODO: Implement attachment functionality
-    console.log('Attachment clicked');
-  };
-
   const handleInputModeChange = (mode: InputMode) => {
     // Check for unsaved input in current mode
     let hasUnsaved = false;
@@ -653,13 +648,6 @@ const ChatDetail: React.FC = () => {
                   type="button"
                 >
                   <Settings size={16} />
-                </button>
-                <button
-                  type="button"
-                  onClick={handleAttachmentClick}
-                  className="attachment-button"
-                >
-                  <Paperclip size={16} />
                 </button>
                 <div className="input-mode-slider-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   <div className="input-mode-slider">

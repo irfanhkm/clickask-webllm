@@ -4,6 +4,7 @@ import { PromptManager, PromptTemplate } from './PromptManager';
 import { DEFAULT_SYSTEM_PROMPT } from '../ModelManagement/ModelManager';
 import { StorageKey } from '../../constants';
 import { Edit, Trash2, Plus, Info } from 'lucide-react';
+import SearchBar from '../../components/SearchBar';
 import './PromptList.css';
 
 const PromptList: React.FC = () => {
@@ -11,6 +12,7 @@ const PromptList: React.FC = () => {
   const [templates, setTemplates] = useState<PromptTemplate[]>([]);
   const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     loadTemplates();
@@ -37,13 +39,24 @@ const PromptList: React.FC = () => {
     setShowSystemPrompt(false);
   };
 
+  const filteredTemplates = templates.filter(template => 
+    template.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    template.content.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="prompt-list-container">
       {!showSystemPrompt && (
         <div className="prompt-list-header">
+          <SearchBar
+            value={searchQuery}
+            onChange={setSearchQuery}
+            placeholder="Search templates..."
+          />
           <div className="header-buttons">
-            <button onClick={() => setShowSystemPrompt(!showSystemPrompt)} className="add-button">
-              {showSystemPrompt ? 'Hide System Prompt' : 'Edit System Prompt'}
+            <button onClick={() => setShowSystemPrompt(!showSystemPrompt)} className="action-button">
+              <Info size={16} />
+              <span>System Prompt</span>
             </button>
             <button onClick={() => navigate('/prompts/new')} className="add-button">
               <Plus size={16} />
@@ -75,7 +88,7 @@ const PromptList: React.FC = () => {
         </div>
       ) : (
         <div className="templates-list">
-          {templates.map((template) => (
+          {filteredTemplates.map((template) => (
             <div key={template.id} className="template-card">
               <div className="template-card-content">
                 <div className="template-card-header">
@@ -101,15 +114,17 @@ const PromptList: React.FC = () => {
                 </div>
                 <div className="template-card-info">
                   <div className="template-description">
-                    <p>{template.content}</p>
+                    <p style={{ whiteSpace: 'pre-wrap' }}>{template.content}</p>
                   </div>
                 </div>
               </div>
             </div>
           ))}
-          {templates.length === 0 && (
+          {filteredTemplates.length === 0 && (
             <div className="no-templates">
-              No prompt templates yet. Click "Add Template" to create one.
+              {templates.length === 0 
+                ? "No prompt templates yet. Click 'Add Template' to create one."
+                : "No templates match your search criteria."}
             </div>
           )}
         </div>

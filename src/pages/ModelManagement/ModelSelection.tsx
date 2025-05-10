@@ -59,7 +59,6 @@ const ModelSelection: React.FC = () => {
         
         // Check for incomplete downloads and resume them
         const savedDownloadStates = JSON.parse(localStorage.getItem(StorageKey.DOWNLOAD_STATES) || '[]');
-        console.log('Saved download states:', savedDownloadStates);
         
         if (savedDownloadStates.length > 0) {
           // Resume all incomplete downloads instead of just the most recent one
@@ -67,7 +66,6 @@ const ModelSelection: React.FC = () => {
             const model = filteredModels.find(m => m.model_id === downloadState.modelId);
             
             if (model && !downloadedMap[model.model_id]) {
-              console.log(`Resuming download for model: ${model.model_id} at ${downloadState.progress}%`);
               // Set initial progress before starting the download
               setDownloadProgress(prev => ({ ...prev, [model.model_id]: downloadState.progress }));
               setIsDownloading(prev => ({ ...prev, [model.model_id]: true }));
@@ -102,7 +100,6 @@ const ModelSelection: React.FC = () => {
       }));
 
     if (activeDownloadStates.length > 0) {
-      console.log('Saving download states:', activeDownloadStates);
       localStorage.setItem(StorageKey.DOWNLOAD_STATES, JSON.stringify(activeDownloadStates));
     } else {
       localStorage.removeItem(StorageKey.DOWNLOAD_STATES);
@@ -123,7 +120,6 @@ const ModelSelection: React.FC = () => {
 
   const handleDownload = async (model: ModelRecord, initialProgress: number = 0) => {
     try {
-      console.log(`Starting download for model: ${model.model_id} with initial progress: ${initialProgress}%`);
       
       // Create a new AbortController for this download
       const controller = new AbortController();
@@ -138,7 +134,6 @@ const ModelSelection: React.FC = () => {
         initProgressCallback: (report: { progress: number }) => {
           if (report.progress) {
             const newProgress = Math.floor(report.progress * 10000) / 100;
-            console.log(`Download progress for ${model.model_id}: ${newProgress}%`);
             setDownloadProgress((prev) => ({
               ...prev,
               [model.model_id]: newProgress,
@@ -146,8 +141,6 @@ const ModelSelection: React.FC = () => {
           }
         },
       });
-
-      console.log(`Download completed for model: ${model.model_id}`);
       
       // Save the downloaded model info to localStorage
       const downloadedModels = JSON.parse(localStorage.getItem(StorageKey.DOWNLOADED_MODELS) || '[]');
@@ -167,9 +160,7 @@ const ModelSelection: React.FC = () => {
       // Navigate to chat after successful download
       navigate('/chats');
     } catch (error: any) {
-      if (error.name === 'AbortError') {
-        console.log(`Download for ${model.model_id} was cancelled`);
-      } else {
+      if (error?.name != 'AbortError') {
         console.error(`Error downloading model ${model.model_id}:`, error);
       }
     } finally {
@@ -194,7 +185,6 @@ const ModelSelection: React.FC = () => {
   const handleCancelDownload = (modelId: string) => {
     if (abortControllers.current[modelId]) {
       abortControllers.current[modelId].abort();
-      console.log(`Cancelled download for ${modelId}`);
       
       // Immediately update UI state
       setIsDownloading(prev => ({ ...prev, [modelId]: false }));

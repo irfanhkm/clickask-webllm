@@ -1,0 +1,67 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: white;
+  overflow-y: auto;
+}
+
+.page-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  gap: 1rem;
+  height: auto;
+}
+
+.page-header h1 {
+  margin: 0;
+  flex: 1;
+}
+
+.page-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Common button styles */
+.back-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.primary-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+
+.secondary-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #f3f4f6;
+  color: #4b5563;
+}
+
+.danger-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  background: #ef4444;
+  color: white;
+} 

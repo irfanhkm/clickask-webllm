@@ -5,7 +5,8 @@ import { ChatManager } from './ChatManager';
 import { ChatRoom } from './types/chat';
 import { prebuiltAppConfig } from '@mlc-ai/web-llm';
 import { useToggle } from '../../hooks/useToggle';
-import { Plus, Search, MessageSquare, Clock } from 'lucide-react';
+import { Plus, MessageSquare, Clock } from 'lucide-react';
+import SearchBar from '../../components/SearchBar';
 import './ChatList.css';
 
 const ChatList: React.FC = () => {
@@ -59,18 +60,15 @@ const ChatList: React.FC = () => {
 
   return (
     <div className="chat-list-container">
-      <div className="search-container">
-        <div className="search-input-wrapper">
-          <Search size={16} className="search-icon" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search chats..."
-            className="search-input"
-          />
-          <button
-            onClick={() => toggleCreating()}
+      <div className="chat-list-header">
+        <SearchBar
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search chats..."
+        />
+        <div className="header-buttons">
+          <button 
+            onClick={() => toggleCreating()} 
             className="add-button"
           >
             <Plus size={16} />
