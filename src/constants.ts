@@ -57,5 +57,9 @@ export enum StorageKey {
   
   // Prompt related
   PROMPT_TEMPLATES = BrowserStorageKey.PROMPT_TEMPLATES,
-  GLOBAL_SYSTEM_PROMPT = LocalStorageKey.GLOBAL_SYSTEM_PROMPT
+  GLOBAL_SYSTEM_PROMPT = LocalStorageKey.GLOBAL_SYSTEM_PROMPT,
+  PENDING_TEMPLATE = 'pendingTemplate',
+  SIDE_PANEL_REDIRECT = 'sidePanelRedirect',
+  SIDE_PANEL_MESSAGE = 'sidePanelMessage',
+  HIGHLIGHTED_TEXT = 'highlightedText'
 }

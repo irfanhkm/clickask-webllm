@@ -6,6 +6,7 @@ import { StorageKey } from '../../constants';
 import { Edit, Trash2, Plus, Info } from 'lucide-react';
 import SearchBar from '../../components/SearchBar';
 import './PromptList.css';
+import browser from 'webextension-polyfill';
 
 const PromptList: React.FC = () => {
   const navigate = useNavigate();
@@ -13,14 +14,19 @@ const PromptList: React.FC = () => {
   const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [systemPromptSaved, setSystemPromptSaved] = useState(false);
 
   useEffect(() => {
     loadTemplates();
-    // Load the current system prompt from localStorage
-    const savedPrompt = localStorage.getItem(StorageKey.GLOBAL_SYSTEM_PROMPT);
-    if (savedPrompt) {
-      setSystemPrompt(savedPrompt);
-    }
+    // Load the current system prompt from storage
+    const loadSystemPrompt = async () => {
+      const result = await browser.storage.local.get(StorageKey.GLOBAL_SYSTEM_PROMPT);
+      const savedPrompt = result[StorageKey.GLOBAL_SYSTEM_PROMPT];
+      if (savedPrompt) {
+        setSystemPrompt(savedPrompt);
+      }
+    };
+    loadSystemPrompt();
   }, []);
 
   const loadTemplates = async () => {
@@ -34,9 +40,14 @@ const PromptList: React.FC = () => {
     setTemplates(templates.filter(template => template.id !== id));
   };
 
-  const handleSaveSystemPrompt = () => {
-    localStorage.setItem(StorageKey.GLOBAL_SYSTEM_PROMPT, systemPrompt.trim());
-    setShowSystemPrompt(false);
+  const handleSaveSystemPrompt = async () => {
+    try {
+      await browser.storage.local.set({ [StorageKey.GLOBAL_SYSTEM_PROMPT]: systemPrompt.trim() });
+      setSystemPromptSaved(true);
+      setTimeout(() => setSystemPromptSaved(false), 2000);
+    } catch (error) {
+      console.error('Error saving system prompt:', error);
+    }
   };
 
   const filteredTemplates = templates.filter(template => 

@@ -9,4 +9,6 @@ export interface ChatRoom {
   createdAt: number;
   lastUpdated: number;
   isVisibleInContextMenu?: boolean;
+  initialPrompt?: string;
+  usePromptMode?: boolean;
 } 
