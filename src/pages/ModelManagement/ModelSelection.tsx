@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { modelList, getModelInfo, ModelManager } from './ModelManager';
 import { StorageKey } from '../../constants';
 import { Download, Pause, Play, X, Check, Star, Info } from 'lucide-react';
+import browser from 'webextension-polyfill';
 import './ModelSelection.css';
 
 // Extend ModelRecord to include size
@@ -39,15 +40,17 @@ const ModelSelection: React.FC = () => {
     const initializeData = async () => {
       try {
         // Check for downloaded models
-        const downloadedModels = JSON.parse(localStorage.getItem(StorageKey.DOWNLOADED_MODELS) || '[]');
+        const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+        const downloadedModels = result[StorageKey.DOWNLOADED_MODELS] || [];
         const downloadedMap = downloadedModels.reduce((acc: {[key: string]: boolean}, model: any) => {
           acc[model.name] = true;
           return acc;
         }, {});
         setIsDownloaded(downloadedMap);
 
-        // Get default model from localStorage
-        const savedDefaultModel = localStorage.getItem(StorageKey.DEFAULT_MODEL) || '';
+        // Get default model from storage
+        const defaultModelResult = await browser.storage.local.get(StorageKey.DEFAULT_MODEL);
+        const savedDefaultModel = defaultModelResult[StorageKey.DEFAULT_MODEL] || '';
         setDefaultModel(savedDefaultModel);
 
         // Filter models that match our available models list
@@ -58,7 +61,8 @@ const ModelSelection: React.FC = () => {
         setModels(filteredModels);
         
         // Check for incomplete downloads and resume them
-        const savedDownloadStates = JSON.parse(localStorage.getItem(StorageKey.DOWNLOAD_STATES) || '[]');
+        const downloadStatesResult = await browser.storage.local.get(StorageKey.DOWNLOAD_STATES);
+        const savedDownloadStates = downloadStatesResult[StorageKey.DOWNLOAD_STATES] || [];
         
         if (savedDownloadStates.length > 0) {
           // Resume all incomplete downloads instead of just the most recent one
@@ -86,7 +90,7 @@ const ModelSelection: React.FC = () => {
     initializeData();
   }, []);
 
-  // Save download progress to localStorage only when needed
+  // Save download progress to storage only when needed
   useEffect(() => {
     if (!isInitialized) return;
     
@@ -100,9 +104,9 @@ const ModelSelection: React.FC = () => {
       }));
 
     if (activeDownloadStates.length > 0) {
-      localStorage.setItem(StorageKey.DOWNLOAD_STATES, JSON.stringify(activeDownloadStates));
+      browser.storage.local.set({ [StorageKey.DOWNLOAD_STATES]: activeDownloadStates });
     } else {
-      localStorage.removeItem(StorageKey.DOWNLOAD_STATES);
+      browser.storage.local.remove(StorageKey.DOWNLOAD_STATES);
     }
   }, [downloadProgress, isDownloading, isDownloaded, isInitialized]);
 
@@ -113,14 +117,13 @@ const ModelSelection: React.FC = () => {
     }
   };
 
-  const handleDefaultModelChange = (modelId: string) => {
+  const handleDefaultModelChange = async (modelId: string) => {
     setDefaultModel(modelId);
-    localStorage.setItem(StorageKey.DEFAULT_MODEL, modelId);
+    await browser.storage.local.set({ [StorageKey.DEFAULT_MODEL]: modelId });
   };
 
   const handleDownload = async (model: ModelRecord, initialProgress: number = 0) => {
     try {
-      
       // Create a new AbortController for this download
       const controller = new AbortController();
       abortControllers.current[model.model_id] = controller;
@@ -142,8 +145,9 @@ const ModelSelection: React.FC = () => {
         },
       });
       
-      // Save the downloaded model info to localStorage
-      const downloadedModels = JSON.parse(localStorage.getItem(StorageKey.DOWNLOADED_MODELS) || '[]');
+      // Save the downloaded model info to storage
+      const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+      const downloadedModels = result[StorageKey.DOWNLOADED_MODELS] || [];
       const modelInfo = {
         name: model.model_id,
         displayName: model.model_lib
@@ -151,14 +155,53 @@ const ModelSelection: React.FC = () => {
       
       if (!downloadedModels.some((m: any) => m.name === modelInfo.name)) {
         downloadedModels.push(modelInfo);
-        localStorage.setItem(StorageKey.DOWNLOADED_MODELS, JSON.stringify(downloadedModels));
+        await browser.storage.local.set({ [StorageKey.DOWNLOADED_MODELS]: downloadedModels });
       }
 
       // Update downloaded status
       setIsDownloaded((prev) => ({ ...prev, [model.model_id]: true }));
       
-      // Navigate to chat after successful download
-      navigate('/chats');
+      // Check for pending template
+      const templateResult = await browser.storage.local.get(StorageKey.PENDING_TEMPLATE);
+      const pendingTemplate = templateResult[StorageKey.PENDING_TEMPLATE];
+      
+      if (pendingTemplate) {
+        // Clear the pending template
+        await browser.storage.local.remove(StorageKey.PENDING_TEMPLATE);
+        
+        // Create a new chat room with the template
+        const chatTitle = pendingTemplate.title.length > 20 
+          ? pendingTemplate.title.substring(0, 20) + "..."
+          : pendingTemplate.title;
+        
+        const newChatRoom = {
+          id: Date.now().toString(),
+          name: chatTitle,
+          modelId: model.model_id,
+          messages: [],
+          createdAt: Date.now(),
+          lastUpdated: Date.now(),
+          initialPrompt: pendingTemplate.content,
+          usePromptMode: true
+        };
+        
+        // Save the new chat room
+        await browser.storage.local.set({ 
+          [StorageKey.CURRENT_CHAT_ID]: newChatRoom.id 
+        });
+        
+        // Add the chat to the list of chats
+        const chatsResult = await browser.storage.local.get(StorageKey.CHATS);
+        const chats = chatsResult[StorageKey.CHATS] || {};
+        chats[newChatRoom.id] = newChatRoom;
+        await browser.storage.local.set({ [StorageKey.CHATS]: chats });
+        
+        // Navigate to the new chat room
+        navigate(`/chats/${newChatRoom.id}`);
+      } else {
+        // Navigate to chat list if no pending template
+        navigate('/chats');
+      }
     } catch (error: any) {
       if (error?.name != 'AbortError') {
         console.error(`Error downloading model ${model.model_id}:`, error);
@@ -182,7 +225,7 @@ const ModelSelection: React.FC = () => {
     }
   };
 
-  const handleCancelDownload = (modelId: string) => {
+  const handleCancelDownload = async (modelId: string) => {
     if (abortControllers.current[modelId]) {
       abortControllers.current[modelId].abort();
       
@@ -201,10 +244,11 @@ const ModelSelection: React.FC = () => {
       // Clean up the AbortController
       delete abortControllers.current[modelId];
       
-      // Remove from localStorage to allow redownload
-      const savedDownloadStates = JSON.parse(localStorage.getItem(StorageKey.DOWNLOAD_STATES) || '[]');
+      // Remove from storage to allow redownload
+      const result = await browser.storage.local.get(StorageKey.DOWNLOAD_STATES);
+      const savedDownloadStates = result[StorageKey.DOWNLOAD_STATES] || [];
       const updatedDownloadStates = savedDownloadStates.filter((state: DownloadState) => state.modelId !== modelId);
-      localStorage.setItem(StorageKey.DOWNLOAD_STATES, JSON.stringify(updatedDownloadStates));
+      await browser.storage.local.set({ [StorageKey.DOWNLOAD_STATES]: updatedDownloadStates });
     }
   };
 

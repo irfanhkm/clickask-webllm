@@ -1,4 +1,4 @@
-import { CreateMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
+import { CreateMLCEngine, CreateServiceWorkerMLCEngine, ModelRecord, prebuiltAppConfig } from '@mlc-ai/web-llm';
 import browser from 'webextension-polyfill';
 import { StorageKey } from '../../constants';
 
@@ -19,6 +19,10 @@ export const DEFAULT_SYSTEM_PROMPT = `You are a helpful AI assistant. Your respo
 9. If you don't know something, simply say "I don't know"`;
 
 export const modelList: ModelInfo[] = [
+  {
+    name: "Llama-3.2-3B-Instruct-q4f16_1-MLC",
+    displayName: "Llama 3.2 3B Instruct"
+  },
   {
     name: "SmolLM2-360M-Instruct-q0f16-MLC",
     displayName: "SmolLM2 360M Instruct"
@@ -94,8 +98,14 @@ export class ModelManager {
     return this.currentEngine;
   }
 
-  static getSystemPrompt(): string {
-    return localStorage.getItem(StorageKey.GLOBAL_SYSTEM_PROMPT) || DEFAULT_SYSTEM_PROMPT;
+  static async getSystemPrompt() {
+    const result = await browser.storage.local.get(StorageKey.GLOBAL_SYSTEM_PROMPT);
+    const systemPrompt = result[StorageKey.GLOBAL_SYSTEM_PROMPT];
+    if (systemPrompt) {
+      return systemPrompt;
+    }
+    await browser.storage.local.set({ [StorageKey.GLOBAL_SYSTEM_PROMPT]: DEFAULT_SYSTEM_PROMPT });
+    return DEFAULT_SYSTEM_PROMPT;
   }
 
   static async initializeEngine(modelId: string): Promise<any> {
@@ -116,7 +126,8 @@ export class ModelManager {
 
   static async getAvailableModels(): Promise<string[]> {
     try {
-      const downloadedModels = JSON.parse(localStorage.getItem(StorageKey.DOWNLOADED_MODELS) || '[]');
+      const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
+      const downloadedModels = result[StorageKey.DOWNLOADED_MODELS];
       return downloadedModels.map((model: ModelInfo) => model.name);
     } catch (error) {
       console.error('Error getting available models:', error);

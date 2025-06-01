@@ -68,7 +68,9 @@ browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     // Forward the request to the background script to open the side panel
     browser.runtime.sendMessage({
       action: BrowserAction.OPEN_SIDE_PANEL_FROM_BUTTON,
-      windowId: message.windowId
+      windowId: message.windowId,
+      redirectTo: message.redirectTo,
+      message: message.message
     }).then(() => {
       sendResponse();
     }).catch(error => {

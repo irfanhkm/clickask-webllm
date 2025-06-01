@@ -57,14 +57,16 @@ export class ChatManager {
     }
   }
 
-  static async createChatRoom(name: string, modelId: string): Promise<ChatRoom> {
+  static async createChatRoom(name: string, modelId: string, initialPrompt?: string, usePromptMode?: boolean): Promise<ChatRoom> {
     const newRoom: ChatRoom = {
       id: Date.now().toString(),
       name: name.trim(),
       modelId,
       messages: [],
       createdAt: Date.now(),
-      lastUpdated: Date.now()
+      lastUpdated: Date.now(),
+      initialPrompt,
+      usePromptMode
     };
 
     try {

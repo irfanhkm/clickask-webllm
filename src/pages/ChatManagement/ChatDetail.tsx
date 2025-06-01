@@ -4,6 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import './ChatDetail.css';
 import { ChatManager } from './ChatManager';
+import { ChatRoom } from './types/chat';
 import { ModelManager } from '../ModelManagement/ModelManager';
 import { PromptManager, PromptTemplate } from '../PromptManagement/PromptManager';
 import { Send, Plus, Copy, Settings, Pencil, ChevronDown, ChevronUp } from 'lucide-react';
@@ -14,16 +15,6 @@ import { StorageKey } from '../../constants';
 interface Message {
   role: 'user' | 'assistant';
   content: string;
-}
-
-interface ChatRoom {
-  id: string;
-  name: string;
-  modelId: string;
-  messages: Message[];
-  createdAt: number;
-  lastUpdated: number;
-  isVisibleInContextMenu?: boolean;
 }
 
 // Input mode types
@@ -90,11 +81,9 @@ const ChatDetail: React.FC = () => {
   // Initialize vector store and load available models
   useEffect(() => {
     const initData = async () => {
-      // Only get downloaded models
-      const downloadedModels = localStorage.getItem(StorageKey.DOWNLOADED_MODELS);
+      const downloadedModels = await ModelManager.getAvailableModels();
       if (downloadedModels) {
-        const models = JSON.parse(downloadedModels);
-        setAvailableModels(models.map((m: any) => m.name));
+        setAvailableModels(downloadedModels);
       } else {
         setAvailableModels([]);
       }
@@ -128,6 +117,20 @@ const ChatDetail: React.FC = () => {
             isVisibleInContextMenu: room.isVisibleInContextMenu ?? false
           });
           
+          // Handle initial prompt and prompt mode if set
+          if (room.initialPrompt) {
+            setInput(room.initialPrompt);
+            
+            // Check if we should use prompt mode
+            if (room.usePromptMode) {
+              setInputMode('prompt');
+              // Check for placeholders after a short delay to ensure state is updated
+              setTimeout(() => {
+                checkForPlaceholders();
+              }, 100);
+            }
+          }
+          
           if (room.modelId) {
             setSelectedModel(room.modelId);
             const currentEngine = ModelManager.getCurrentEngine();
@@ -138,6 +141,7 @@ const ChatDetail: React.FC = () => {
             }
           }
         } else {
+          console.error('Chat room not found');
           navigate('/chats');
         }
       } catch (error) {
@@ -145,7 +149,7 @@ const ChatDetail: React.FC = () => {
         setError(error instanceof Error ? error.message : 'An error occurred');
       }
     };
-
+    
     loadChat();
   }, [roomId, navigate]);
 
@@ -184,6 +188,22 @@ const ChatDetail: React.FC = () => {
       });
       
       setPromptInputs(newInputs);
+      
+      // After setting up placeholders, check for highlighted text
+      browser.storage.local.get(StorageKey.HIGHLIGHTED_TEXT).then(result => {
+        const highlightedText = result[StorageKey.HIGHLIGHTED_TEXT];
+        if (highlightedText && Object.keys(newInputs).length > 0) {
+          // Fill the first prompt input with the highlighted text
+          const firstInputKey = Object.keys(newInputs)[0];
+          setPromptInputs(prev => ({
+            ...prev,
+            [firstInputKey]: highlightedText
+          }));
+          
+          // Clear the highlighted text from storage
+          browser.storage.local.remove(StorageKey.HIGHLIGHTED_TEXT);
+        }
+      });
     } else {
       // Clear inputs if no placeholders found
       setPromptInputs({});
@@ -315,7 +335,7 @@ const ChatDetail: React.FC = () => {
 
     try {
       // Get system prompt from ModelManager
-      const systemPrompt = ModelManager.getSystemPrompt();
+      const systemPrompt = await ModelManager.getSystemPrompt();
 
       // Use the engine's chat completion API with proper message formatting
       const messages = [
@@ -442,6 +462,42 @@ const ChatDetail: React.FC = () => {
   const markdownComponents = createMarkdownComponents({
     onCopyCode: handleCopyMessage
   });
+
+  // Add message listener for updates from background script
+  useEffect(() => {
+    const handleMessage = async (message: any) => {
+      if (message.action === 'UPDATE_CHAT_DETAIL') {
+        // If we're already on the correct chat page
+        if (roomId === message.chatId) {
+          // If we have highlighted text and we're in prompt mode
+          if (message.highlightedText && inputMode === 'prompt') {
+            // Check for placeholders and fill the first one
+            setTimeout(() => {
+              checkForPlaceholders();
+              if (Object.keys(promptInputs).length > 0) {
+                const firstInputKey = Object.keys(promptInputs)[0];
+                setPromptInputs(prev => ({
+                  ...prev,
+                  [firstInputKey]: message.highlightedText
+                }));
+              }
+            }, 100);
+          }
+        } else {
+          // If we're on a different chat, navigate to the new one
+          navigate(`/chats/${message.chatId}`);
+        }
+      }
+    };
+
+    // Add message listener
+    browser.runtime.onMessage.addListener(handleMessage);
+
+    // Cleanup
+    return () => {
+      browser.runtime.onMessage.removeListener(handleMessage);
+    };
+  }, [roomId, inputMode, promptInputs, navigate]);
 
   if (!room) {
     return <div>Loading...</div>;
@@ -645,7 +701,7 @@ const ChatDetail: React.FC = () => {
                   onClick={() => navigate('/chats')}
                   className="back-button"
                 >
-                  ← Back
+                  ←
                 </button>
                 <button
                   onClick={() => setShowSettings(!showSettings)}

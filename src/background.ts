@@ -1,6 +1,8 @@
 import browser from "webextension-polyfill";
 import { PromptManager, PromptTemplate } from "./pages/PromptManagement/PromptManager";
 import { BROWSER_CONTEXT_PROMPT_ID, BrowserAction, StorageKey } from "./constants";
+import ModelManager from "./pages/ModelManagement/ModelManager";
+import { ChatManager } from "./pages/ChatManagement/ChatManager";
 
 // Handle Chrome side panel
 if (chrome?.sidePanel) {
@@ -62,10 +64,55 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
       const selectedTemplate = templates.find(t => t.id === promptId);
       
       if (selectedTemplate) {
-        // Get the current chat ID from storage
-        const result = await browser.storage.local.get(StorageKey.CURRENT_CHAT_ID);
-        const currentChatId = result[StorageKey.CURRENT_CHAT_ID];
+        // Get available models
+        const downloadedModels = await ModelManager.getAvailableModels();
         
+        if (downloadedModels.length === 0) {
+          console.error("No models available for chat creation");
+          return;
+        }
+        
+        // Create a new chat room with a title based on the template
+        // Use the first 20 characters of the template title or the full title if shorter
+        const chatTitle = selectedTemplate.title.length > 20 
+          ? selectedTemplate.title.substring(0, 20) + "..."
+          : selectedTemplate.title;
+        
+        // Create a new chat room using ChatManager
+        const newChatRoom = await ChatManager.createChatRoom(
+          chatTitle,
+          downloadedModels[0],
+          selectedTemplate.content,
+          true
+        );
+        
+        // Save the current chat ID
+        await browser.storage.local.set({ 
+          [StorageKey.CURRENT_CHAT_ID]: newChatRoom.id 
+        });
+        
+        // Store the highlighted text if available
+        const highlightedText = info.selectionText || '';
+        
+        // Store the redirect information for the side panel
+        await browser.storage.local.set({
+          [StorageKey.SIDE_PANEL_REDIRECT]: `/chats/${newChatRoom.id}`,
+          [StorageKey.SIDE_PANEL_MESSAGE]: `Created new chat: ${chatTitle}`,
+          [StorageKey.HIGHLIGHTED_TEXT]: highlightedText
+        });
+        
+        // Try to send a message to the side panel first
+        try {
+          await browser.runtime.sendMessage({
+            action: 'UPDATE_CHAT_DETAIL',
+            chatId: newChatRoom.id,
+            highlightedText: highlightedText
+          });
+        } catch (error) {
+          console.log('Side panel not open or not ready, will open it');
+        }
+        
+        // Open the side panel
         if (chrome?.sidePanel && tab.windowId) {
           // Send a message to the content script to open the side panel
           browser.tabs.sendMessage(tab.id, {
@@ -90,13 +137,6 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
             hasWindowId: !!tab.windowId
           });
         }
-        // if (currentChatId) {
-        //   // Send message to content script to insert the prompt
-        //   browser.tabs.sendMessage(tab.id, {
-        //     action: "insertPrompt",
-        //     prompt: selectedTemplate.content
-        //   });
-        // }
       }
     } catch (error) {
       console.error("Error handling prompt selection:", error);

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PromptManager, PromptTemplate } from './PromptManager';
-import { DEFAULT_SYSTEM_PROMPT } from '../ModelManagement/ModelManager';
+import ModelManager, { DEFAULT_SYSTEM_PROMPT } from '../ModelManagement/ModelManager';
 import { StorageKey } from '../../constants';
 import { Edit, Trash2, Plus, Info } from 'lucide-react';
 import SearchBar from '../../components/SearchBar';
 import './PromptList.css';
+import browser from 'webextension-polyfill';
 
 const PromptList: React.FC = () => {
   const navigate = useNavigate();
@@ -13,14 +14,18 @@ const PromptList: React.FC = () => {
   const [systemPrompt, setSystemPrompt] = useState<string>('');
   const [showSystemPrompt, setShowSystemPrompt] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [systemPromptSaved, setSystemPromptSaved] = useState(false);
 
   useEffect(() => {
     loadTemplates();
-    // Load the current system prompt from localStorage
-    const savedPrompt = localStorage.getItem(StorageKey.GLOBAL_SYSTEM_PROMPT);
-    if (savedPrompt) {
-      setSystemPrompt(savedPrompt);
-    }
+    // Load the current system prompt from storage
+    const loadSystemPrompt = async () => {
+      const systemprompt = await ModelManager.getSystemPrompt();
+      if (systemprompt) {
+        setSystemPrompt(systemprompt);
+      }
+    };
+    loadSystemPrompt();
   }, []);
 
   const loadTemplates = async () => {
@@ -34,9 +39,14 @@ const PromptList: React.FC = () => {
     setTemplates(templates.filter(template => template.id !== id));
   };
 
-  const handleSaveSystemPrompt = () => {
-    localStorage.setItem(StorageKey.GLOBAL_SYSTEM_PROMPT, systemPrompt.trim());
-    setShowSystemPrompt(false);
+  const handleSaveSystemPrompt = async () => {
+    try {
+      await browser.storage.local.set({ [StorageKey.GLOBAL_SYSTEM_PROMPT]: systemPrompt.trim() });
+      setSystemPromptSaved(true);
+      setTimeout(() => setSystemPromptSaved(false), 2000);
+    } catch (error) {
+      console.error('Error saving system prompt:', error);
+    }
   };
 
   const filteredTemplates = templates.filter(template => 

@@ -27,15 +27,9 @@ export enum BrowserStorageKey {
   DOWNLOAD_STATES = 'downloadStates',
   
   // Prompt related
-  PROMPT_TEMPLATES = 'promptTemplates'
-}
+  PROMPT_TEMPLATES = 'promptTemplates',
 
-// Local storage keys (localStorage)
-export enum LocalStorageKey {
   GLOBAL_SYSTEM_PROMPT = 'globalSystemPrompt',
-  DOWNLOADED_MODELS = 'downloadedModels',
-  DEFAULT_MODEL = 'defaultModel',
-  DOWNLOAD_STATES = 'downloadStates'
 }
 
 // IndexedDB keys
@@ -57,5 +51,9 @@ export enum StorageKey {
   
   // Prompt related
   PROMPT_TEMPLATES = BrowserStorageKey.PROMPT_TEMPLATES,
-  GLOBAL_SYSTEM_PROMPT = LocalStorageKey.GLOBAL_SYSTEM_PROMPT
+  GLOBAL_SYSTEM_PROMPT = BrowserStorageKey.GLOBAL_SYSTEM_PROMPT,
+  PENDING_TEMPLATE = 'pendingTemplate',
+  SIDE_PANEL_REDIRECT = 'sidePanelRedirect',
+  SIDE_PANEL_MESSAGE = 'sidePanelMessage',
+  HIGHLIGHTED_TEXT = 'highlightedText'
 }
