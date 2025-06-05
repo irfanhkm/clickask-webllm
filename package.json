@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "rm -rf dist/ && tsc && vite build",
+    "build": "rimraf dist/ && tsc && vite build",
     "build:firefox": "cross-env TARGET=firefox tsc && vite build",
     "build:chrome": "cross-env TARGET=chrome tsc && vite build"
   },
