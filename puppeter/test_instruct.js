@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 //   Change this to your extension or web app URL for chat list page
-const baseUrl = 'chrome-extension://inmcbnhlaocpknodclgmjgbjmmonpedl/src/PanelRoute.html'; // Update accordingly
+const baseUrl = 'chrome-extension://egmnonkjlpgfhdjpaiaaghkjcpojnbbk/src/PanelRoute.html'; // Update accordingly
 const progressFile = path.resolve(__dirname, 'progress.json');
 const outputFile = path.resolve(__dirname, '../coherence-data/llama7b', 'result_reply.json');
 const dataPath = path.resolve(__dirname, 'data', 'testData_instruct.json');
@@ -58,9 +58,17 @@ async function runTest() {
   const testData = JSON.parse(rawData);
 
   const browser = await puppeteer.connect({
-    browserURL: 'http://localhost:9222',
+    browserURL: 'http://127.0.0.1:9225',
   });
+  
   const page = await browser.newPage();
+
+  // Set large viewport to simulate full screen
+  await page.setViewport({
+    width: 1920,
+    height: 1080,
+  });
+  
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
   for (const testItem of testData) {
@@ -74,6 +82,8 @@ async function runTest() {
         console.log(`Skipping test id ${testItem.id} because it was completed`);
         continue; // skip tests before last completed
     }
+    await page.evaluate(() => window.scrollTo(0, 0));
+    
     console.log(`\nTesting chat id: ${testItem.id}`);
 
     // Open create chat UI
@@ -85,10 +95,10 @@ async function runTest() {
     // Click create button
     await page.click('button.create-button');
 
-    await page.waitForSelector('textarea:not([disabled])', { timeout: 12000 });
+    await page.waitForSelector('textarea:not([disabled])', { timeout: 120000 });
 
     // Construct prompt
-    const prompt = `Summarize the following article in exactly 2–3 sentences, mentioning only the main event and its direct outcome. Do not include any background, opinions, or minor details. Be as concise as possible. \n "${testItem.article}"`;
+    const prompt = `Summarize the following article in 2 or 3 sentences. Only include the main event and its immediate outcome, avoiding all background, side details, or interpretation. Your summary must be strictly factual, concise, and limited to what is directly stated in the article: \n "${testItem.article}"`;
 
     // Fill in the textarea by setting value directly
     await page.click('textarea', { clickCount: 3 });

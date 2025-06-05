@@ -356,28 +356,15 @@ const ChatDetail: React.FC = () => {
       };
       setRoom(streamingRoom);
 
-      const chunks = await engineRef.current.chat.completions.create({
+      const result = await engineRef.current.chat.completions.create({
         messages,
-        stream: true,
+        stream: false,
         max_tokens: 1024,
         temperature: 0.0,
-        stream_options: { include_usage: true },
         response_format: { type: "text" }
       });
       
-      let reply = "";
-      for await (const chunk of chunks) {
-        const content = chunk.choices[0]?.delta.content;
-        if (content !== undefined && content !== null) {
-          reply += content;
-          // Update the streaming message content
-          streamingMessage.content = reply;
-          setRoom({
-            ...streamingRoom,
-            messages: [...updatedMessages, { ...streamingMessage }]
-          });
-        }
-      }
+      const reply = result.choices[0]?.message?.content || "";
 
       // Final update with complete message
       const assistantMessage: Message = { 
@@ -394,6 +381,8 @@ const ChatDetail: React.FC = () => {
 
       // Save to ChatManager
       await ChatManager.updateChat(room.id, newRoom);
+
+      engineRef.current.resetChat();
 
     } catch (error) {
       console.error('Error in chat:', error);
