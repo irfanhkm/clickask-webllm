@@ -85,10 +85,10 @@ async function runTest() {
     // Click create button
     await page.click('button.create-button');
 
-    await page.waitForSelector('textarea:not([disabled])', { timeout: 8000 });
+    await page.waitForSelector('textarea:not([disabled])', { timeout: 12000 });
 
     // Construct prompt
-    const prompt = `Summarize the following article by focusing only on the most important facts and key points relevant to the main event. Write a concise summary of about 3 to 5 sentences that captures the essential information without extra details or opinions \n "${testItem.article}"`;
+    const prompt = `Summarize the following article in exactly 2–3 sentences, mentioning only the main event and its direct outcome. Do not include any background, opinions, or minor details. Be as concise as possible. \n "${testItem.article}"`;
 
     // Fill in the textarea by setting value directly
     await page.click('textarea', { clickCount: 3 });
