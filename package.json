@@ -1,6 +1,6 @@
 {
   "name": "clickask-webllm",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "ClickAsk WebLLM is a browser shortcut that lets you using a pre-defined LLM (Large Language Model) via WebLLM.",
   "repository": "git@github.com:irfanhkm/clickask-webllm.git",
   "author": "Irfan Hakim <hakimirfan90@gmail.com>",
@@ -8,7 +8,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "rm -rf dist/ && tsc && vite build",
     "build:firefox": "cross-env TARGET=firefox tsc && vite build",
     "build:chrome": "cross-env TARGET=chrome tsc && vite build"
   },

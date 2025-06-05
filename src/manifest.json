@@ -2,7 +2,7 @@
   "{{chrome}}.manifest_version": 3,
   "{{firefox}}.manifest_version": 3,
   "name": "ClickAsk WebLLM",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "ClickAsk WebLLM is a browser shortcut that lets you using a pre-defined LLM (Large Language Model) via WebLLM.",
   "icons": {
     "16": "icon/16.png",
@@ -30,12 +30,17 @@
     "storage",
     "contextMenus",
     "activeTab",
-    "windows"
+    "windows",
+    "notifications"
   ],
   "background": {
     "{{chrome}}.service_worker": "src/background.ts",
     "{{firefox}}.scripts": ["src/background.ts"]
   },
+  "web_accessible_resources": [{
+   "resources": ["src/PanelRoute.html"],
+   "matches": ["<all_urls>"]
+}],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],

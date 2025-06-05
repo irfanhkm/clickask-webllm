@@ -131,11 +131,18 @@ browser.contextMenus.onClicked.addListener(async (info, tab) => {
                 });
             }
           });
+        } else if (browser?.sidebarAction) {
+          browser.sidebarAction.setPanel({ panel: "src/PanelRoute.html" }).catch(console.error);
+
+          // Notify user to open the sidebar manually
+          browser.notifications.create({
+            type: "basic",
+            iconUrl: "icon/48.png",
+            title: "Prompt Ready",
+            message: "Open the sidebar to view the generated chat."
+          }).catch(console.error);
         } else {
-          console.log("Cannot open side panel:", {
-            hasSidePanel: !!chrome?.sidePanel,
-            hasWindowId: !!tab.windowId
-          });
+          console.log("No compatible panel API available for this browser.");
         }
       }
     } catch (error) {

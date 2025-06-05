@@ -1,0 +1,14 @@
+{
+  "name": "webllm-chatbot-test",
+  "version": "1.0.0",
+  "description": "Automated Puppeteer tests for WebLLM Chatbot extension",
+  "main": "test.js",
+  "scripts": {
+    "test": "node test_instruct.js"
+  },
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^20.0.0"
+  }
+}

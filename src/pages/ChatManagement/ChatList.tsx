@@ -14,6 +14,7 @@ const ChatList: React.FC = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [availableModels, setAvailableModels] = useState<string[]>([]);
   const [isCreating, toggleCreating] = useToggle(false);
+  const [isBatchTesting, toggleBatchTesting] = useToggle(false);
   const [newChatName, setNewChatName] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -74,8 +75,41 @@ const ChatList: React.FC = () => {
             <Plus size={16} />
             <span>New Chat</span>
           </button>
+          <button 
+            onClick={() => toggleCreating()} 
+            className="add-button"
+          >
+            <Plus size={16} />
+            <span>Batch Testing</span>
+          </button>
         </div>
       </div>
+      
+       {isBatchTesting && (
+        <div className="create-chat-section">
+          <input
+            type="text"
+            value={newChatName}
+            onChange={(e) => setNewChatName(e.target.value)}
+            placeholder="Enter chat name"
+            className="chat-name-input"
+          />
+          <div className="create-chat-actions">
+            <button
+              onClick={() => toggleCreating()}
+              className="cancel-button"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleCreateChat}
+              className="create-button"
+            >
+              Create
+            </button>
+          </div>
+        </div>
+      )}
 
       {isCreating && (
         <div className="create-chat-section">
@@ -137,7 +171,7 @@ const ChatList: React.FC = () => {
         ))}
         {filteredRooms.length === 0 && (
           <div className="no-chats">
-            {searchQuery ? 'No matching chat rooms found' : 'No chat rooms yet'}
+            {searchQuery ? 'No matching chat rooms found' : 'Empty chat rooms'}
           </div>
         )}
       </div>

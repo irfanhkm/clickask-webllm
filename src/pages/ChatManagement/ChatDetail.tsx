@@ -360,7 +360,7 @@ const ChatDetail: React.FC = () => {
         messages,
         stream: true,
         max_tokens: 1024,
-        temperature: 0.7,
+        temperature: 0.0,
         stream_options: { include_usage: true },
         response_format: { type: "text" }
       });

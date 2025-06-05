@@ -7,16 +7,7 @@ export interface ModelInfo {
   displayName: string;
 }
 
-export const DEFAULT_SYSTEM_PROMPT = `You are a helpful AI assistant. Your responses should:
-1. Use markdown formatting for better readability
-2. Format code blocks with proper language tags
-3. Use lists and headers for organization
-4. Use bold/italic for emphasis
-5. NEVER repeat or rephrase the user's question
-6. Provide direct answers without any preamble
-7. Be concise and to the point
-8. Focus on the specific information requested
-9. If you don't know something, simply say "I don't know"`;
+export const DEFAULT_SYSTEM_PROMPT = `You are a helpful summarization assistant. Your task is to generate concise and factual summaries based strictly on the input article. Summaries should be clear, focused on key facts, and avoid adding any opinions or extra information not present in the article. Keep the summary length between 3 and 5 sentences.`;
 
 export const modelList: ModelInfo[] = [
   {
@@ -99,12 +90,6 @@ export class ModelManager {
   }
 
   static async getSystemPrompt() {
-    const result = await browser.storage.local.get(StorageKey.GLOBAL_SYSTEM_PROMPT);
-    const systemPrompt = result[StorageKey.GLOBAL_SYSTEM_PROMPT];
-    if (systemPrompt) {
-      return systemPrompt;
-    }
-    await browser.storage.local.set({ [StorageKey.GLOBAL_SYSTEM_PROMPT]: DEFAULT_SYSTEM_PROMPT });
     return DEFAULT_SYSTEM_PROMPT;
   }
 
@@ -128,7 +113,7 @@ export class ModelManager {
     try {
       const result = await browser.storage.local.get(StorageKey.DOWNLOADED_MODELS);
       const downloadedModels = result[StorageKey.DOWNLOADED_MODELS];
-      return downloadedModels.map((model: ModelInfo) => model.name);
+      return downloadedModels?.map((model: ModelInfo) => model.name) ?? [];
     } catch (error) {
       console.error('Error getting available models:', error);
       return [];
