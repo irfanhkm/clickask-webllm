@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 // Get base folder from command line argument or fallback to "llama7b"
-const baseFolder = process.argv[2] || 'llama7b';
-const fileName = "20250606T165847135Z_result_reply.json";
+const baseFolder = process.argv[2] || 'phi';
+const fileName = "7Jun0130_result_reply.json";
 const folderPath = path.resolve(__dirname, baseFolder);
 
 const resultPath = path.resolve(folderPath + "/output", fileName);
@@ -29,6 +29,27 @@ for (const item of resultData) {
   } else {
     validCount++;
   }
+
+   // --- 1.a. Hitung decode speed untuk masing-masing entry ---
+  // Pastikan field berikut ada di setiap item:
+  //   - item.output_token_length  (misalnya 104)
+  //   - item.latency_ms           (misalnya 15770)
+  if (typeof item.output_token_length === 'number' && typeof item.latency_ms === 'number') {
+    const decodeTimeSec = item.latency_ms / 1000;
+    // tokens per second
+    item.decode_speed_tps = parseFloat(
+      (item.output_token_length / decodeTimeSec).toFixed(2)
+    );
+  } else {
+    item.decode_speed_tps = null;  // jika salah satu field tidak ada
+  }
+}
+
+try {
+  fs.writeFileSync(resultPath, JSON.stringify(resultData, null, 2), 'utf-8');
+  console.log(`\nUpdated file written back to ${fileName} (with decode_speed_tps).`);
+} catch (e) {
+  console.error('Error writing updated resultData:', e.message);
 }
 
 if (invalidItems.length) {
