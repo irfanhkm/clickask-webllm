@@ -22,12 +22,12 @@ export const modelList: ModelInfo[] = [
     displayName: "SmolLM2 360M Instruct"
   },
   {
-    name: "Qwen2.5-Coder-7B-Instruct-q4f16_1-MLC",
-    displayName: "Qwen2.5 Coder 7B Instruct"
+    name: "Phi-3.5-mini-instruct-q4f16_1-MLC",
+    displayName: "Phi 3.5 mini instruct"
   },
   {
-    name: "Qwen2.5-Coder-0.5B-Instruct-q4f16_1-MLC",
-    displayName: "Qwen2.5 0.5B Coder instruct"
+    name: "Qwen2.5-Coder-3B-Instruct-q4f16_1-MLC",
+    displayName: "Qwen 2.5 3B  Instruct"
   }
 ];
 

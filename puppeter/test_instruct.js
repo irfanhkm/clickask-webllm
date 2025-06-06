@@ -2,33 +2,29 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-//   Change this to your extension or web app URL for chat list page
-const baseUrl = 'chrome-extension://egmnonkjlpgfhdjpaiaaghkjcpojnbbk/src/PanelRoute.html'; // Update accordingly
-const progressFile = path.resolve(__dirname, 'progress.json');
-const outputFile = path.resolve(__dirname, '../coherence-data/llama7b', 'result_reply.json');
+const urlModel = "mlc-ai/Llama-3.2-3B-Instruct-q4f16_1-MLC";
+
+/* ---------- CONFIG ---------- */
+const model = 'llama7b';
+const baseUrl = 'chrome-extension://inmcbnhlaocpknodclgmjgbjmmonpedl/src/PanelRoute.html';
 const dataPath = path.resolve(__dirname, 'data', 'testData_instruct.json');
+const progressFile = path.resolve(__dirname, 'progress.json');
+
+const runId = new Date().toISOString().replace(/[:.-]/g, '');
+const outputFile = path.resolve(`../coherence-data/${model}/output/`, `${runId}_result_reply.json`)
 
 // Load last completed id from file
 function loadProgress() {
   try {
     if (fs.existsSync(progressFile)) {
       const data = fs.readFileSync(progressFile, 'utf8');
-      const json = JSON.parse(data);
-      return json.lastCompletedId || null;
+      return JSON.parse(data).lastCompletedId || null;
     }
-  } catch (e) {
-    console.error('Error loading progress:', e);
-  }
+  } catch {}
   return null;
 }
-
-// Save last completed id to file
 function saveProgress(id) {
-  try {
-    fs.writeFileSync(progressFile, JSON.stringify({ lastCompletedId: id }), 'utf8');
-  } catch (e) {
-    console.error('Error saving progress:', e);
-  }
+  fs.writeFileSync(progressFile, JSON.stringify({ lastCompletedId: id }));
 }
 
 // Append single entry to output file, maintaining a JSON array structure
@@ -51,6 +47,7 @@ function appendOutput(entry) {
 }
 
 async function runTest() {
+  const { AutoTokenizer } = await import('@xenova/transformers');
   const lastCompletedId = loadProgress();
   let skip = true;
   // Load test data from file
@@ -58,98 +55,61 @@ async function runTest() {
   const testData = JSON.parse(rawData);
 
   const browser = await puppeteer.connect({
-    browserURL: 'http://127.0.0.1:9225',
+    browserURL: 'http://localhost:9222',
   });
-  
   const page = await browser.newPage();
-
-  // Set large viewport to simulate full screen
-  await page.setViewport({
-    width: 1920,
-    height: 1080,
-  });
-  
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
-  for (const testItem of testData) {
-    if (!lastCompletedId) skip = false;
+  for (const item of testData) {
     if (skip) {
-        // If this testItem.id equals last completed id, stop skipping and start testing next
-        if (testItem.id === lastCompletedId) {
-        skip = false;
-        continue; // skip the last completed test itself
-        }
-        console.log(`Skipping test id ${testItem.id} because it was completed`);
-        continue; // skip tests before last completed
+      if (item.id === lastCompletedId) { skip = false; continue; }
+      console.log(`Skipping ${item.id}`); continue;
     }
+
     await page.evaluate(() => window.scrollTo(0, 0));
-    
-    console.log(`\nTesting chat id: ${testItem.id}`);
+    console.log(`\nProcessing id ${item.id}`);
 
-    // Open create chat UI
+    const prompt = `Summarize the following article in 2 or 3 sentences. Only include the main event and its immediate outcome, avoiding all background, side details, or interpretation. Your summary must be strictly factual, concise, and limited to what is directly stated in the article:\n\n"${item.article}"`;
+    const tokenizer = await AutoTokenizer.from_pretrained(urlModel);
+    const tokenizerResult = await tokenizer(prompt);
+    const tokenLength = tokenizerResult.input_ids.size;
+
+    // create chat
     await page.click('button.add-button');
-
-    // Type chat title as ID
-    await page.type('input.chat-name-input', testItem.id);
-
-    // Click create button
+    await page.type('input.chat-name-input', String(item.id));
     await page.click('button.create-button');
-
     await page.waitForSelector('textarea:not([disabled])', { timeout: 120000 });
 
-    // Construct prompt
-    const prompt = `Summarize the following article in 2 or 3 sentences. Only include the main event and its immediate outcome, avoiding all background, side details, or interpretation. Your summary must be strictly factual, concise, and limited to what is directly stated in the article: \n "${testItem.article}"`;
-
-    // Fill in the textarea by setting value directly
     await page.click('textarea', { clickCount: 3 });
-    await page.keyboard.press('Backspace'); 
-
-    await page.evaluate((text) => {
-        const textarea = document.querySelector('textarea');
-        if (!textarea) return;
-
-        const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
-        nativeInputValueSetter.call(textarea, text);
-
-        const event = new Event('input', { bubbles: true });
-        textarea.dispatchEvent(event);
+    await page.keyboard.press('Backspace');
+    await page.evaluate((t) => {
+      const ta = document.querySelector('textarea');
+      const set = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value').set;
+      set.call(ta, t); ta.dispatchEvent(new Event('input', { bubbles: true }));
     }, prompt);
 
-
-    // Click send
+    const t0 = Date.now();
     await page.click('button.send-button');
-
-    // Wait for streaming to finish (streaming indicator disappears)
     await page.waitForFunction(() => {
-        const messages = document.querySelectorAll('.message-assistant');
-        if (messages.length === 0) return false;
-        const lastMsg = messages[messages.length - 1];
-        return lastMsg.querySelector('.message-actions') !== null;
+      const msgs = document.querySelectorAll('.message-assistant');
+      if (msgs.length === 0) return false;
+      return msgs[msgs.length - 1].querySelector('.message-actions') !== null;
     }, { timeout: 120000 });
 
-    // Now get the full assistant message content
     const reply = await page.evaluate(() => {
-        const messages = document.querySelectorAll('.message-assistant');
-        return messages[messages.length - 1]?.textContent || '';
+      const msgs = document.querySelectorAll('.message-assistant');
+      return msgs[msgs.length - 1]?.textContent || '';
     });
-    
+    const latency = Date.now() - t0;
 
-    appendOutput({
-      id: testItem.id,
-      article: testItem.article,
-      short_summary: testItem.short_summary || '',
-      reply: reply,
-    });
+    appendOutput({ id: item.id, latency_ms: latency, article: item.article, short_summary: item.short_summary, prompt, reply, token_length: tokenLength });
+    saveProgress(item.id);
 
-    saveProgress(testItem.id);
-
-    console.log(`Reply:\n${reply}`);
-
-    // Wait a bit before next iteration
+    console.log(`Reply: ${reply}`);
+    console.log(`Latency ${latency} ms`);
     await page.waitForTimeout(100);
     await page.click('button.back-button');
   }
-
 
   console.log(`all test data tested`);
 }
@@ -158,6 +118,3 @@ runTest().catch(err => {
   console.error(err);
   process.exit(1);
 });
-
-
-// exec arch -arm64 "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug

@@ -3,7 +3,8 @@ import json
 from rouge_score import rouge_scorer
 
 folder = sys.argv[1] if len(sys.argv) > 1 else 'llama7b'
-data_file = f'{folder}/result_reply.json'
+name = sys.argv[2]
+data_file = f'{folder}/output/{name}'
 
 def load_data(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:

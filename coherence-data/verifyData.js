@@ -4,12 +4,10 @@ const path = require('path');
 
 // Get base folder from command line argument or fallback to "llama7b"
 const baseFolder = process.argv[2] || 'llama7b';
+const fileName = "20250606T165847135Z_result_reply.json";
 const folderPath = path.resolve(__dirname, baseFolder);
 
-// Timestamp for filenames
-const timestamp = Math.floor(Date.now() / 1000);
-
-const resultPath = path.resolve(folderPath, 'result_reply.json');
+const resultPath = path.resolve(folderPath + "/output", fileName);
 const instructPath = path.resolve(__dirname, '../puppeter/data/testData_instruct.json');
 
 // Load data
@@ -51,15 +49,9 @@ if (missingIds.length) {
 
 // Save a copy of result_reply.json with timestamp
 const outputFolder = folderPath + "/output"; // same folder
-const outputResultFilename = `${timestamp}_result_reply.json`;
-const outputResultPath = path.resolve(outputFolder, outputResultFilename);
-
-fs.writeFileSync(outputResultPath, JSON.stringify(resultData, null, 2), 'utf-8');
-console.log(`Saved result data to ${outputResultFilename}`);
-
 try {
   const pythonResult = execSync(
-    `python rouge_eval.py ${baseFolder}`, 
+    `python rouge_eval.py ${baseFolder} ${fileName}`, 
     { encoding: 'utf-8' }
   );
   console.log('\n=== ROUGE scores ===\n');
@@ -95,7 +87,7 @@ try {
 
   const rougeJson = parseRougeOutput(pythonResult);
 
-  const outputRougeFilename = `${timestamp}_${baseFolder}_rouge_result.json`;
+  const outputRougeFilename = `${fileName}_${baseFolder}_rouge_result.json`;
   const outputRougePath = path.resolve(outputFolder, outputRougeFilename);
 
   fs.writeFileSync(outputRougePath, JSON.stringify(rougeJson, null, 2), 'utf-8');
