@@ -10,7 +10,7 @@ const baseUrl = 'chrome-extension://inmcbnhlaocpknodclgmjgbjmmonpedl/src/PanelRo
 const dataPath = path.resolve(__dirname, 'data', 'testData_instruct.json');
 const progressFile = path.resolve(__dirname, 'progress.json');
 
-const runId = new Date().toISOString().replace(/[:.-]/g, '');
+const runId = "7Jun0130"
 const outputFile = path.resolve(`../coherence-data/${model}/output/`, `${runId}_result_reply.json`)
 
 // Load last completed id from file
@@ -48,6 +48,7 @@ function appendOutput(entry) {
 
 async function runTest() {
   const { AutoTokenizer } = await import('@xenova/transformers');
+  const tokenizer = await AutoTokenizer.from_pretrained(urlModel);
   const lastCompletedId = loadProgress();
   let skip = true;
   // Load test data from file
@@ -58,19 +59,20 @@ async function runTest() {
     browserURL: 'http://localhost:9222',
   });
   const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 })
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
   for (const item of testData) {
+    if (!lastCompletedId) skip = false;
     if (skip) {
       if (item.id === lastCompletedId) { skip = false; continue; }
       console.log(`Skipping ${item.id}`); continue;
     }
 
-    await page.evaluate(() => window.scrollTo(0, 0));
+    await page.evaluate(() => window.scrollTo(-1, -1));
     console.log(`\nProcessing id ${item.id}`);
 
     const prompt = `Summarize the following article in 2 or 3 sentences. Only include the main event and its immediate outcome, avoiding all background, side details, or interpretation. Your summary must be strictly factual, concise, and limited to what is directly stated in the article:\n\n"${item.article}"`;
-    const tokenizer = await AutoTokenizer.from_pretrained(urlModel);
     const tokenizerResult = await tokenizer(prompt);
     const tokenLength = tokenizerResult.input_ids.size;
 
@@ -102,7 +104,9 @@ async function runTest() {
     });
     const latency = Date.now() - t0;
 
-    appendOutput({ id: item.id, latency_ms: latency, article: item.article, short_summary: item.short_summary, prompt, reply, token_length: tokenLength });
+    const tokenizerOutput = await tokenizer(prompt);
+    const outputLength = tokenizerOutput.input_ids.size;
+    appendOutput({ id: item.id, latency_ms: latency, article: item.article, short_summary: item.short_summary, prompt, reply, input_token_length: tokenLength, output_token_length: outputLength });
     saveProgress(item.id);
 
     console.log(`Reply: ${reply}`);
