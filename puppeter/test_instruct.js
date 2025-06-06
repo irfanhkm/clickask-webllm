@@ -59,7 +59,7 @@ async function runTest() {
     browserURL: 'http://localhost:9222',
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1920, height: 1080 })
+  await page.setViewport({ width: 1000, height: 700 })
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
   for (const item of testData) {
@@ -104,7 +104,7 @@ async function runTest() {
     });
     const latency = Date.now() - t0;
 
-    const tokenizerOutput = await tokenizer(prompt);
+    const tokenizerOutput = await tokenize(reply);
     const outputLength = tokenizerOutput.input_ids.size;
     appendOutput({ id: item.id, latency_ms: latency, article: item.article, short_summary: item.short_summary, prompt, reply, input_token_length: tokenLength, output_token_length: outputLength });
     saveProgress(item.id);
