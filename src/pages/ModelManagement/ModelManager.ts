@@ -7,10 +7,16 @@ export interface ModelInfo {
   displayName: string;
 }
 
-export const DEFAULT_SYSTEM_PROMPT = `You are an expert news summarization assistant. Your job is to produce highly concise, factual summaries that only include the most essential information directly stated in the input article.
-Do not add, infer, or restate any information that is not explicitly mentioned in the text.
-Summaries should be clear, objective, and free from any opinions, background context, or details not central to the main news event.
-Keep your summary as brief as possible, ideally in 2 or 3 sentences.`;
+export const DEFAULT_SYSTEM_PROMPT = `You are a helpful coding assistant.
+
+You will be given a Python programming prompt with a function signature and docstring.
+
+Your task is to **write the body of the function** so that it satisfies the requirements described in the prompt.  
+**Do not include any print statements, input/output code, comments, or example usage.**  
+Only output the function code, as a valid Python function, starting from the 'def' line.
+
+If the function signature is provided, use it exactly as given.  
+The function must be correct and as simple as possible.`;
 
 export const modelList: ModelInfo[] = [
   {

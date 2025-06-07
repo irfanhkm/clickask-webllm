@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Get base folder from command line argument or fallback to "llama7b"
-const baseFolder = process.argv[2] || 'phi';
+const baseFolder = process.argv[2] || 'smolLLM';
 const fileName = "7Jun0130_result_reply.json";
 const folderPath = path.resolve(__dirname, baseFolder);
 

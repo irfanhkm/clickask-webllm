@@ -1,0 +1,24 @@
+{
+  "raw_output": "Average ROUGE scores over 100 items:\r\nrouge1: Precision=0.349, Recall=0.620, F1=0.432\r\nrouge2: Precision=0.160, Recall=0.283, F1=0.197\r\nrougeL: Precision=0.225, Recall=0.403, F1=0.279\r\n",
+  "total_item": 100,
+  "rouge1": {
+    "precision": 0.349,
+    "recall": 0.62,
+    "f1": 0.432
+  },
+  "rouge2": {
+    "precision": 0.16,
+    "recall": 0.283,
+    "f1": 0.197
+  },
+  "rougeL": {
+    "precision": 0,
+    "recall": 0,
+    "f1": 0
+  },
+  "rougel": {
+    "precision": 0.225,
+    "recall": 0.403,
+    "f1": 0.279
+  }
+}

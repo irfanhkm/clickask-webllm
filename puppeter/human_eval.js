@@ -2,13 +2,13 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const path = require('path');
 
-const urlModel = "mlc-ai/SmolLM2-360M-Instruct-q0f16-MLC";
+const urlModel = "mlc-ai/Qwen2.5-Coder-3B-Instruct-q4f16_1-MLC";
 
 /* ---------- CONFIG ---------- */
-const model = 'smolLLM';
+const model = 'qwen2.5';
 const browserURL = 'http://127.0.0.1:9225';
 const baseUrl = 'chrome-extension://egmnonkjlpgfhdjpaiaaghkjcpojnbbk/src/PanelRoute.html';
-const dataPath = path.resolve(__dirname, 'data', 'testData_instruct.json');
+const dataPath = path.resolve(__dirname, 'data', 'human_eval.json');
 const progressFile = path.resolve(__dirname, 'progress.json');
 
 const runId = "7Jun0130"
@@ -72,9 +72,9 @@ async function runTest() {
     }
 
     await page.evaluate(() => window.scrollTo(-1, -1));
-    console.log(`\nProcessing id ${item.id}`);
+    console.log(`\nProcessing id ${item.id}, data: ${JSON.stringify(item.test)}`);
 
-    const prompt = `Summarize the following article in 2 or 3 sentences. Only include the main event and its immediate outcome, avoiding all background, side details, or interpretation. Your summary must be strictly factual, concise, and limited to what is directly stated in the article:\n\n"${item.article}"`;
+    const prompt = `make me code for: ${item.prompt}`;
     const tokenizerResult = await tokenizer(prompt);
     const tokenLength = tokenizerResult.input_ids.size;
 
@@ -108,7 +108,7 @@ async function runTest() {
 
     const tokenizerOutput = await tokenizer(reply);
     const outputLength = tokenizerOutput.input_ids.size;
-    appendOutput({ id: item.id, latency_ms: latency, article: item.article, short_summary: item.short_summary, prompt, reply, input_token_length: tokenLength, output_token_length: outputLength });
+    appendOutput({ id: item.id, latency_ms: latency, prompt:prompt, test_case: item.test, reply:reply, input_token_length: tokenLength, output_token_length: outputLength });
     saveProgress(item.id);
 
     console.log(`Reply: ${reply}`);

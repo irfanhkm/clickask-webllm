@@ -4,7 +4,8 @@
   "description": "Automated Puppeteer tests for WebLLM Chatbot extension",
   "main": "test.js",
   "scripts": {
-    "test": "node test_instruct.js"
+    "test": "node test_instruct.js",
+    "test-code": "node human_eval.js"
   },
   "author": "Your Name",
   "license": "MIT",
