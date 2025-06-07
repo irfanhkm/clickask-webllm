@@ -6,8 +6,7 @@ const urlModel = "mlc-ai/SmolLM2-360M-Instruct-q0f16-MLC";
 
 /* ---------- CONFIG ---------- */
 const model = 'smolLLM';
-const browserURL = 'http://127.0.0.1:9225';
-const baseUrl = 'chrome-extension://egmnonkjlpgfhdjpaiaaghkjcpojnbbk/src/PanelRoute.html';
+const baseUrl = 'chrome-extension://inmcbnhlaocpknodclgmjgbjmmonpedl/src/PanelRoute.html';
 const dataPath = path.resolve(__dirname, 'data', 'testData_instruct.json');
 const progressFile = path.resolve(__dirname, 'progress.json');
 
@@ -57,16 +56,15 @@ async function runTest() {
   const testData = JSON.parse(rawData);
 
   const browser = await puppeteer.connect({
-    browserURL,
+    browserURL: 'http://localhost:9222',
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1000, height: 1200 })
+  await page.setViewport({ width: 1000, height: 700 })
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
   for (const item of testData) {
     if (!lastCompletedId) skip = false;
     if (skip) {
-      console.log(lastCompletedId)
       if (item.id === lastCompletedId) { skip = false; continue; }
       console.log(`Skipping ${item.id}`); continue;
     }
@@ -98,7 +96,7 @@ async function runTest() {
       const msgs = document.querySelectorAll('.message-assistant');
       if (msgs.length === 0) return false;
       return msgs[msgs.length - 1].querySelector('.message-actions') !== null;
-    }, { timeout: 100000 });
+    }, { timeout: 120000 });
 
     const reply = await page.evaluate(() => {
       const msgs = document.querySelectorAll('.message-assistant');

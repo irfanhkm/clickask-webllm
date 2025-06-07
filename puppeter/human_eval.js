@@ -6,8 +6,8 @@ const urlModel = "mlc-ai/Qwen2.5-Coder-3B-Instruct-q4f16_1-MLC";
 
 /* ---------- CONFIG ---------- */
 const model = 'qwen2.5';
-const browserURL = 'http://127.0.0.1:9225';
-const baseUrl = 'chrome-extension://egmnonkjlpgfhdjpaiaaghkjcpojnbbk/src/PanelRoute.html';
+const browserURL = 'http://127.0.0.1:9222';
+const baseUrl = 'chrome-extension://inmcbnhlaocpknodclgmjgbjmmonpedl/src/PanelRoute.html';
 const dataPath = path.resolve(__dirname, 'data', 'human_eval.json');
 const progressFile = path.resolve(__dirname, 'progress.json');
 
@@ -60,7 +60,7 @@ async function runTest() {
     browserURL,
   });
   const page = await browser.newPage();
-  await page.setViewport({ width: 1000, height: 1200 })
+  await page.setViewport({ width: 1000, height: 700 })
   await page.goto(baseUrl, { waitUntil: 'networkidle2' });
 
   for (const item of testData) {

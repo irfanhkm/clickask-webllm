@@ -1,0 +1,178 @@
+[
+  {
+    "id": "HumanEval/0",
+    "device": "Mid-Range",
+    "latency_ms": 6923,
+    "input_token_length": 123,
+    "output_token_length": 61,
+    "decode_speed_tps": 8.81
+  },
+  {
+    "id": "HumanEval/1",
+    "device": "Mid-Range",
+    "latency_ms": 9662,
+    "input_token_length": 114,
+    "output_token_length": 107,
+    "decode_speed_tps": 11.07
+  },
+  {
+    "id": "HumanEval/2",
+    "device": "Mid-Range",
+    "latency_ms": 3583,
+    "input_token_length": 85,
+    "output_token_length": 18,
+    "decode_speed_tps": 5.02
+  },
+  {
+    "id": "HumanEval/3",
+    "device": "Mid-Range",
+    "latency_ms": 5633,
+    "input_token_length": 118,
+    "output_token_length": 45,
+    "decode_speed_tps": 7.99
+  },
+  {
+    "id": "HumanEval/4",
+    "device": "Mid-Range",
+    "latency_ms": 6081,
+    "input_token_length": 116,
+    "output_token_length": 51,
+    "decode_speed_tps": 8.39
+  },
+  {
+    "id": "HumanEval/5",
+    "device": "Mid-Range",
+    "latency_ms": 5926,
+    "input_token_length": 91,
+    "output_token_length": 55,
+    "decode_speed_tps": 9.28
+  },
+  {
+    "id": "HumanEval/6",
+    "device": "Mid-Range",
+    "latency_ms": 9298,
+    "input_token_length": 111,
+    "output_token_length": 102,
+    "decode_speed_tps": 10.97
+  },
+  {
+    "id": "HumanEval/7",
+    "device": "Mid-Range",
+    "latency_ms": 4483,
+    "input_token_length": 92,
+    "output_token_length": 32,
+    "decode_speed_tps": 7.14
+  },
+  {
+    "id": "HumanEval/8",
+    "device": "Mid-Range",
+    "latency_ms": 5598,
+    "input_token_length": 111,
+    "output_token_length": 42,
+    "decode_speed_tps": 7.5
+  },
+  {
+    "id": "HumanEval/9",
+    "device": "Mid-Range",
+    "latency_ms": 6746,
+    "input_token_length": 99,
+    "output_token_length": 67,
+    "decode_speed_tps": 9.93
+  },
+  {
+    "id": "HumanEval/10",
+    "device": "Mid-Range",
+    "latency_ms": 12747,
+    "input_token_length": 142,
+    "output_token_length": 144,
+    "decode_speed_tps": 11.3
+  },
+  {
+    "id": "HumanEval/0",
+    "device": "High-End",
+    "latency_ms": 11144,
+    "input_token_length": 123,
+    "output_token_length": 61,
+    "decode_speed_tps": 5.47
+  },
+  {
+    "id": "HumanEval/1",
+    "device": "High-End",
+    "latency_ms": 9513,
+    "input_token_length": 114,
+    "output_token_length": 107,
+    "decode_speed_tps": 11.25
+  },
+  {
+    "id": "HumanEval/2",
+    "device": "High-End",
+    "latency_ms": 44767,
+    "input_token_length": 85,
+    "output_token_length": 18,
+    "decode_speed_tps": 0.4
+  },
+  {
+    "id": "HumanEval/3",
+    "device": "High-End",
+    "latency_ms": 5481,
+    "input_token_length": 118,
+    "output_token_length": 45,
+    "decode_speed_tps": 8.21
+  },
+  {
+    "id": "HumanEval/4",
+    "device": "High-End",
+    "latency_ms": 5609,
+    "input_token_length": 116,
+    "output_token_length": 51,
+    "decode_speed_tps": 9.09
+  },
+  {
+    "id": "HumanEval/5",
+    "device": "High-End",
+    "latency_ms": 5637,
+    "input_token_length": 91,
+    "output_token_length": 55,
+    "decode_speed_tps": 9.76
+  },
+  {
+    "id": "HumanEval/6",
+    "device": "High-End",
+    "latency_ms": 8880,
+    "input_token_length": 111,
+    "output_token_length": 102,
+    "decode_speed_tps": 11.49
+  },
+  {
+    "id": "HumanEval/7",
+    "device": "High-End",
+    "latency_ms": 33981,
+    "input_token_length": 92,
+    "output_token_length": 32,
+    "decode_speed_tps": 0.94
+  },
+  {
+    "id": "HumanEval/8",
+    "device": "High-End",
+    "latency_ms": 4997,
+    "input_token_length": 111,
+    "output_token_length": 42,
+    "decode_speed_tps": 8.41
+  },
+  {
+    "id": "HumanEval/9",
+    "device": "High-End",
+    "latency_ms": 23666,
+    "input_token_length": 99,
+    "output_token_length": 67,
+    "decode_speed_tps": 2.83
+  },
+  {
+    "id": "HumanEval/10",
+    "device": "High-End",
+    "latency_ms": 12342,
+    "input_token_length": 142,
+    "output_token_length": 144,
+    "decode_speed_tps": 11.67
+  }
+]
