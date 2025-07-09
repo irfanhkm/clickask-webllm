@@ -74,7 +74,7 @@ async function runTest() {
     await page.evaluate(() => window.scrollTo(-1, -1));
     console.log(`\nProcessing id ${item.id}, data: ${JSON.stringify(item.test)}`);
 
-    const prompt = `make me code for: ${item.prompt}`;
+    const prompt = `Make me code for: ${item.prompt}`;
     const tokenizerResult = await tokenizer(prompt);
     const tokenLength = tokenizerResult.input_ids.size;
 
