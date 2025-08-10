@@ -8,7 +8,7 @@ const fileName = "mac-7Jun0130_result_reply.json";
 const folderPath = path.resolve(__dirname, baseFolder);
 
 const resultPath = path.resolve(folderPath + "/output", fileName);
-const instructPath = path.resolve(__dirname, '../puppeter/data/testData_instruct.json');
+const instructPath = path.resolve(__dirname, './testData_instruct.json');
 
 // Load data
 const resultData = JSON.parse(fs.readFileSync(resultPath, 'utf-8'));
