@@ -1,0 +1,1602 @@
+[
+  {
+    "id": "1211a23db42e7dd52a43e564a899ebbf1b2d1251",
+    "device": "Mid-Range",
+    "latency_ms": 27004,
+    "input_token_length": 1528,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.74
+  },
+  {
+    "id": "aff92aa2fc6e294efeeed70e9b0a0aefac32b030",
+    "device": "Mid-Range",
+    "latency_ms": 24629,
+    "input_token_length": 1312,
+    "output_token_length": 113,
+    "decode_speed_tps": 4.59
+  },
+  {
+    "id": "bb7757b7bf3d90ec4f1d1915a4699eecafc25d1a",
+    "device": "Mid-Range",
+    "latency_ms": 12965,
+    "input_token_length": 521,
+    "output_token_length": 96,
+    "decode_speed_tps": 7.4
+  },
+  {
+    "id": "8f25b2c54cb563b98e1f2619401df7137a3f0c77",
+    "device": "Mid-Range",
+    "latency_ms": 20636,
+    "input_token_length": 962,
+    "output_token_length": 123,
+    "decode_speed_tps": 5.96
+  },
+  {
+    "id": "daa6ca8fe860fa70bed00e2bfd05ab7414b7cb0e",
+    "device": "Mid-Range",
+    "latency_ms": 13464,
+    "input_token_length": 642,
+    "output_token_length": 83,
+    "decode_speed_tps": 6.16
+  },
+  {
+    "id": "c0cdf7175fc2032b547fafa8fb72c104886d38b7",
+    "device": "Mid-Range",
+    "latency_ms": 14297,
+    "input_token_length": 577,
+    "output_token_length": 109,
+    "decode_speed_tps": 7.62
+  },
+  {
+    "id": "efed3617e3c01ba45b090f6fc6a62a7e77131576",
+    "device": "Mid-Range",
+    "latency_ms": 42537,
+    "input_token_length": 2385,
+    "output_token_length": 131,
+    "decode_speed_tps": 3.08
+  },
+  {
+    "id": "694eb1e7c38a77d5eabb0e630e4194f47fa0bb08",
+    "device": "Mid-Range",
+    "latency_ms": 19348,
+    "input_token_length": 949,
+    "output_token_length": 105,
+    "decode_speed_tps": 5.43
+  },
+  {
+    "id": "34964187fef7eb394d7d192f6197d315fcb7d852",
+    "device": "Mid-Range",
+    "latency_ms": 19131,
+    "input_token_length": 840,
+    "output_token_length": 128,
+    "decode_speed_tps": 6.69
+  },
+  {
+    "id": "e1cffc79b05bd0a1a63137086ede6811762f3fc9",
+    "device": "Mid-Range",
+    "latency_ms": 29937,
+    "input_token_length": 878,
+    "output_token_length": 106,
+    "decode_speed_tps": 3.54
+  },
+  {
+    "id": "055a276b1e49334d1dae623301578903975b87b3",
+    "device": "Mid-Range",
+    "latency_ms": 25705,
+    "input_token_length": 549,
+    "output_token_length": 108,
+    "decode_speed_tps": 4.2
+  },
+  {
+    "id": "37c67e3bb3314618bbd47188b6e8d33185c25ae8",
+    "device": "Mid-Range",
+    "latency_ms": 24347,
+    "input_token_length": 505,
+    "output_token_length": 104,
+    "decode_speed_tps": 4.27
+  },
+  {
+    "id": "505afe66a4fea2ff3190e190f9bfefdc395111fa",
+    "device": "Mid-Range",
+    "latency_ms": 42742,
+    "input_token_length": 1242,
+    "output_token_length": 133,
+    "decode_speed_tps": 3.11
+  },
+  {
+    "id": "509fba532a438301c79a8aca9bf360cb06ef24ad",
+    "device": "Mid-Range",
+    "latency_ms": 33163,
+    "input_token_length": 822,
+    "output_token_length": 126,
+    "decode_speed_tps": 3.8
+  },
+  {
+    "id": "11553a553300edebfbde80e20455ebaf13249be6",
+    "device": "Mid-Range",
+    "latency_ms": 25516,
+    "input_token_length": 622,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.96
+  },
+  {
+    "id": "35fd96052e6da4047ee55f35b60f47f3e1a0b0ac",
+    "device": "Mid-Range",
+    "latency_ms": 31131,
+    "input_token_length": 760,
+    "output_token_length": 121,
+    "decode_speed_tps": 3.89
+  },
+  {
+    "id": "ad06d06cb31d621efffb02fe85daeb4143855364",
+    "device": "Mid-Range",
+    "latency_ms": 43848,
+    "input_token_length": 1585,
+    "output_token_length": 88,
+    "decode_speed_tps": 2.01
+  },
+  {
+    "id": "50016c9ebda33812f64270387ddfcf87339d2e9c",
+    "device": "Mid-Range",
+    "latency_ms": 29951,
+    "input_token_length": 666,
+    "output_token_length": 119,
+    "decode_speed_tps": 3.97
+  },
+  {
+    "id": "c1ac2ad61acf2c619323b64bf7c4e8ff56985928",
+    "device": "Mid-Range",
+    "latency_ms": 28397,
+    "input_token_length": 687,
+    "output_token_length": 115,
+    "decode_speed_tps": 4.05
+  },
+  {
+    "id": "440d95dfddcac3bb83e7d2d5d3f779dc8195b776",
+    "device": "Mid-Range",
+    "latency_ms": 42804,
+    "input_token_length": 1351,
+    "output_token_length": 109,
+    "decode_speed_tps": 2.55
+  },
+  {
+    "id": "ec4d5c7ea36de0118c5ea617488bf0a0c8500c85",
+    "device": "Mid-Range",
+    "latency_ms": 36960,
+    "input_token_length": 966,
+    "output_token_length": 112,
+    "decode_speed_tps": 3.03
+  },
+  {
+    "id": "468b3b7a6fd4f236d3a5a0a88b9c9a3139ef0120",
+    "device": "Mid-Range",
+    "latency_ms": 26557,
+    "input_token_length": 562,
+    "output_token_length": 113,
+    "decode_speed_tps": 4.25
+  },
+  {
+    "id": "d356ff2ff1bf0a994db249287c1525ff95100bd0",
+    "device": "Mid-Range",
+    "latency_ms": 23681,
+    "input_token_length": 615,
+    "output_token_length": 88,
+    "decode_speed_tps": 3.72
+  },
+  {
+    "id": "a774c6f7a8cdbd5fe3d7f75f6660f4a6034df759",
+    "device": "Mid-Range",
+    "latency_ms": 24933,
+    "input_token_length": 574,
+    "output_token_length": 100,
+    "decode_speed_tps": 4.01
+  },
+  {
+    "id": "30aaa44b5fa91609940655a81a9f17229c343681",
+    "device": "Mid-Range",
+    "latency_ms": 37055,
+    "input_token_length": 1010,
+    "output_token_length": 103,
+    "decode_speed_tps": 2.78
+  },
+  {
+    "id": "e522dbe306074bfc08a63b430381161d4bb0cb99",
+    "device": "Mid-Range",
+    "latency_ms": 19384,
+    "input_token_length": 768,
+    "output_token_length": 24,
+    "decode_speed_tps": 1.24
+  },
+  {
+    "id": "bab2d9d1c934c6be09ad34050569dc5153563b18",
+    "device": "Mid-Range",
+    "latency_ms": 23402,
+    "input_token_length": 482,
+    "output_token_length": 95,
+    "decode_speed_tps": 4.06
+  },
+  {
+    "id": "879e68a2b78b3cf3f5c2581bbf6093871143ed7b",
+    "device": "Mid-Range",
+    "latency_ms": 13697,
+    "input_token_length": 249,
+    "output_token_length": 59,
+    "decode_speed_tps": 4.31
+  },
+  {
+    "id": "c6946b25758430e35671438e7b5402a330e84a8b",
+    "device": "Mid-Range",
+    "latency_ms": 35747,
+    "input_token_length": 1143,
+    "output_token_length": 96,
+    "decode_speed_tps": 2.69
+  },
+  {
+    "id": "be87f5ab3f17f13c76b9b240fe22e16172f15be6",
+    "device": "Mid-Range",
+    "latency_ms": 27349,
+    "input_token_length": 717,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.69
+  },
+  {
+    "id": "18ace93d44a05e8fab590c34aedf3bd38807704e",
+    "device": "Mid-Range",
+    "latency_ms": 37356,
+    "input_token_length": 1072,
+    "output_token_length": 123,
+    "decode_speed_tps": 3.29
+  },
+  {
+    "id": "68e87222243c6bca9b01ca89e91304b11bc188c4",
+    "device": "Mid-Range",
+    "latency_ms": 52899,
+    "input_token_length": 1795,
+    "output_token_length": 118,
+    "decode_speed_tps": 2.23
+  },
+  {
+    "id": "3281b670082cd3f50b104819a0bd0f253f296921",
+    "device": "Mid-Range",
+    "latency_ms": 37331,
+    "input_token_length": 1121,
+    "output_token_length": 112,
+    "decode_speed_tps": 3
+  },
+  {
+    "id": "0e0e0f6d86365f11ce031ad7bafbfe395a0dac8e",
+    "device": "Mid-Range",
+    "latency_ms": 19498,
+    "input_token_length": 321,
+    "output_token_length": 98,
+    "decode_speed_tps": 5.03
+  },
+  {
+    "id": "cde806eae49292fcc13e6fbbf6e30828fe5b20cf",
+    "device": "Mid-Range",
+    "latency_ms": 27539,
+    "input_token_length": 1203,
+    "output_token_length": 23,
+    "decode_speed_tps": 0.84
+  },
+  {
+    "id": "1445d983e4c84d2f64e01b511b98089172f3c729",
+    "device": "Mid-Range",
+    "latency_ms": 31864,
+    "input_token_length": 811,
+    "output_token_length": 118,
+    "decode_speed_tps": 3.7
+  },
+  {
+    "id": "c5e779b3c8c927fd209450635682cb115dcd299e",
+    "device": "Mid-Range",
+    "latency_ms": 19265,
+    "input_token_length": 419,
+    "output_token_length": 81,
+    "decode_speed_tps": 4.2
+  },
+  {
+    "id": "b457f9495b354194a3e4bb0774a646c5212c637f",
+    "device": "Mid-Range",
+    "latency_ms": 31633,
+    "input_token_length": 838,
+    "output_token_length": 112,
+    "decode_speed_tps": 3.54
+  },
+  {
+    "id": "8d7d3f0dd34be0dc7a9adaefb810f4694692e125",
+    "device": "Mid-Range",
+    "latency_ms": 63565,
+    "input_token_length": 2274,
+    "output_token_length": 115,
+    "decode_speed_tps": 1.81
+  },
+  {
+    "id": "f79ec5e5f3beab95a30755e7fefed5bbc6540965",
+    "device": "Mid-Range",
+    "latency_ms": 20129,
+    "input_token_length": 489,
+    "output_token_length": 79,
+    "decode_speed_tps": 3.92
+  },
+  {
+    "id": "cd464a71f78fcde9dac3af317c0c3c07095364f7",
+    "device": "Mid-Range",
+    "latency_ms": 29922,
+    "input_token_length": 924,
+    "output_token_length": 85,
+    "decode_speed_tps": 2.84
+  },
+  {
+    "id": "084e566c5992ee26f4853a07e1e2f5d046a8f31d",
+    "device": "Mid-Range",
+    "latency_ms": 23931,
+    "input_token_length": 482,
+    "output_token_length": 110,
+    "decode_speed_tps": 4.6
+  },
+  {
+    "id": "1fe844305054474677e5e06e108918ae559b5002",
+    "device": "Mid-Range",
+    "latency_ms": 22180,
+    "input_token_length": 460,
+    "output_token_length": 99,
+    "decode_speed_tps": 4.46
+  },
+  {
+    "id": "ac86d30965597ae05542cc60000fadb6763ad681",
+    "device": "Mid-Range",
+    "latency_ms": 44431,
+    "input_token_length": 1470,
+    "output_token_length": 112,
+    "decode_speed_tps": 2.52
+  },
+  {
+    "id": "6cac45235fabc6610fc2c9b55eb451ce323ae426",
+    "device": "Mid-Range",
+    "latency_ms": 31119,
+    "input_token_length": 806,
+    "output_token_length": 112,
+    "decode_speed_tps": 3.6
+  },
+  {
+    "id": "90ff1e19becc5db1d965c128fada6a31a3800cae",
+    "device": "Mid-Range",
+    "latency_ms": 39382,
+    "input_token_length": 1131,
+    "output_token_length": 114,
+    "decode_speed_tps": 2.89
+  },
+  {
+    "id": "a21f49697a6d0a14a822390d5ea85106a5b6de0c",
+    "device": "Mid-Range",
+    "latency_ms": 27533,
+    "input_token_length": 710,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.67
+  },
+  {
+    "id": "bfd2e47bd9f31d85edbfa175e11d84b62195cbdf",
+    "device": "Mid-Range",
+    "latency_ms": 20914,
+    "input_token_length": 858,
+    "output_token_length": 20,
+    "decode_speed_tps": 0.96
+  },
+  {
+    "id": "a3ea4d5d3afb8701c31d15f2587ad048c9781d3d",
+    "device": "Mid-Range",
+    "latency_ms": 31047,
+    "input_token_length": 898,
+    "output_token_length": 98,
+    "decode_speed_tps": 3.16
+  },
+  {
+    "id": "6ae9d415ebbcb9678c70f4e7ee9687a1bd2a8311",
+    "device": "Mid-Range",
+    "latency_ms": 30382,
+    "input_token_length": 793,
+    "output_token_length": 111,
+    "decode_speed_tps": 3.65
+  },
+  {
+    "id": "1348c6008fe4dbf7ab5b977109ee77220c889e1b",
+    "device": "Mid-Range",
+    "latency_ms": 40794,
+    "input_token_length": 1261,
+    "output_token_length": 106,
+    "decode_speed_tps": 2.6
+  },
+  {
+    "id": "ce5347453db97ef2b95a909a7cccf4b11bb485f2",
+    "device": "Mid-Range",
+    "latency_ms": 21063,
+    "input_token_length": 398,
+    "output_token_length": 101,
+    "decode_speed_tps": 4.8
+  },
+  {
+    "id": "3d305a3c8bc0f0ac24cd6624cf11dda9549ed678",
+    "device": "Mid-Range",
+    "latency_ms": 13830,
+    "input_token_length": 191,
+    "output_token_length": 69,
+    "decode_speed_tps": 4.99
+  },
+  {
+    "id": "46a27f4800dc142e8c20432e27fc7314974d11e4",
+    "device": "Mid-Range",
+    "latency_ms": 37390,
+    "input_token_length": 1014,
+    "output_token_length": 126,
+    "decode_speed_tps": 3.37
+  },
+  {
+    "id": "6e27f01032684c94804138a490c4a027ad082c01",
+    "device": "Mid-Range",
+    "latency_ms": 25731,
+    "input_token_length": 508,
+    "output_token_length": 119,
+    "decode_speed_tps": 4.62
+  },
+  {
+    "id": "736e2dd063fadebec16253d56c15360f66b670f1",
+    "device": "Mid-Range",
+    "latency_ms": 17731,
+    "input_token_length": 310,
+    "output_token_length": 84,
+    "decode_speed_tps": 4.74
+  },
+  {
+    "id": "7107c58d03b34f404e26430e88b6c61551fb1d67",
+    "device": "Mid-Range",
+    "latency_ms": 26429,
+    "input_token_length": 724,
+    "output_token_length": 90,
+    "decode_speed_tps": 3.41
+  },
+  {
+    "id": "33c5d95fc08df92318a146bf0e27fa17c69530e6",
+    "device": "Mid-Range",
+    "latency_ms": 33100,
+    "input_token_length": 1002,
+    "output_token_length": 87,
+    "decode_speed_tps": 2.63
+  },
+  {
+    "id": "1ce4460de8405031d2a87eeadc9bda946ac3f915",
+    "device": "Mid-Range",
+    "latency_ms": 43381,
+    "input_token_length": 1412,
+    "output_token_length": 113,
+    "decode_speed_tps": 2.6
+  },
+  {
+    "id": "920e4463e8dac3f5868f7e312d0a7624e3fa0564",
+    "device": "Mid-Range",
+    "latency_ms": 38414,
+    "input_token_length": 1219,
+    "output_token_length": 106,
+    "decode_speed_tps": 2.76
+  },
+  {
+    "id": "4b33fe31111cdd7e1189435f2ce8aef64aca4170",
+    "device": "Mid-Range",
+    "latency_ms": 35465,
+    "input_token_length": 1030,
+    "output_token_length": 113,
+    "decode_speed_tps": 3.19
+  },
+  {
+    "id": "c8ca9d1026d415a376190aed5d841c9a5f1bf0e6",
+    "device": "Mid-Range",
+    "latency_ms": 33446,
+    "input_token_length": 971,
+    "output_token_length": 107,
+    "decode_speed_tps": 3.2
+  },
+  {
+    "id": "9dd6b80460c8598d3c43410b22a3ab6eda1c8bce",
+    "device": "Mid-Range",
+    "latency_ms": 31449,
+    "input_token_length": 880,
+    "output_token_length": 106,
+    "decode_speed_tps": 3.37
+  },
+  {
+    "id": "bb7b1b13029de48092ee5d2a975e5e330ff7faa8",
+    "device": "Mid-Range",
+    "latency_ms": 31605,
+    "input_token_length": 838,
+    "output_token_length": 110,
+    "decode_speed_tps": 3.48
+  },
+  {
+    "id": "7477aac2b0c1e6154b4cc9a6774c2c7bc63efaaf",
+    "device": "Mid-Range",
+    "latency_ms": 34315,
+    "input_token_length": 960,
+    "output_token_length": 114,
+    "decode_speed_tps": 3.32
+  },
+  {
+    "id": "7730bafdd90069375e88aaeae2cc5e9bb87a6685",
+    "device": "Mid-Range",
+    "latency_ms": 30715,
+    "input_token_length": 799,
+    "output_token_length": 113,
+    "decode_speed_tps": 3.68
+  },
+  {
+    "id": "f1c384d8fac5578c4c567d026781ed010ae25cdf",
+    "device": "Mid-Range",
+    "latency_ms": 28231,
+    "input_token_length": 781,
+    "output_token_length": 98,
+    "decode_speed_tps": 3.47
+  },
+  {
+    "id": "ca4ba32a8bef2333b2a1b7e85866a99d3cf689d8",
+    "device": "Mid-Range",
+    "latency_ms": 25198,
+    "input_token_length": 728,
+    "output_token_length": 81,
+    "decode_speed_tps": 3.21
+  },
+  {
+    "id": "c265f3c77a4ce860333a932dd23fa77e27c8e825",
+    "device": "Mid-Range",
+    "latency_ms": 44813,
+    "input_token_length": 1338,
+    "output_token_length": 130,
+    "decode_speed_tps": 2.9
+  },
+  {
+    "id": "b11dd5aaee8d6619c629383fb82caa5aa8a25e3e",
+    "device": "Mid-Range",
+    "latency_ms": 22997,
+    "input_token_length": 526,
+    "output_token_length": 99,
+    "decode_speed_tps": 4.3
+  },
+  {
+    "id": "46b40d1afad525866bd41a639648f7dfbe1050ec",
+    "device": "Mid-Range",
+    "latency_ms": 24830,
+    "input_token_length": 757,
+    "output_token_length": 73,
+    "decode_speed_tps": 2.94
+  },
+  {
+    "id": "3db34a01672de370fe2165ba570e056b615d6c9b",
+    "device": "Mid-Range",
+    "latency_ms": 26829,
+    "input_token_length": 747,
+    "output_token_length": 93,
+    "decode_speed_tps": 3.47
+  },
+  {
+    "id": "e8113a819d77e917b4166089705ff40e5ecdba77",
+    "device": "Mid-Range",
+    "latency_ms": 35246,
+    "input_token_length": 800,
+    "output_token_length": 135,
+    "decode_speed_tps": 3.83
+  },
+  {
+    "id": "59e0b12e68fb7e759b2982698094ee66f1287528",
+    "device": "Mid-Range",
+    "latency_ms": 21868,
+    "input_token_length": 414,
+    "output_token_length": 92,
+    "decode_speed_tps": 4.21
+  },
+  {
+    "id": "7a460c06d63584a0f65fe98a8585600833239812",
+    "device": "Mid-Range",
+    "latency_ms": 41724,
+    "input_token_length": 1337,
+    "output_token_length": 98,
+    "decode_speed_tps": 2.35
+  },
+  {
+    "id": "6e722d26dac423fb69682990c6cd0d507cab5410",
+    "device": "Mid-Range",
+    "latency_ms": 41246,
+    "input_token_length": 953,
+    "output_token_length": 108,
+    "decode_speed_tps": 2.62
+  },
+  {
+    "id": "7d5d118f3152ed1ae1318a6877af0d60b3225f89",
+    "device": "Mid-Range",
+    "latency_ms": 36312,
+    "input_token_length": 1144,
+    "output_token_length": 97,
+    "decode_speed_tps": 2.67
+  },
+  {
+    "id": "d6df7f5d99865b048caf00773602c0a7b1133bf5",
+    "device": "Mid-Range",
+    "latency_ms": 68433,
+    "input_token_length": 2398,
+    "output_token_length": 124,
+    "decode_speed_tps": 1.81
+  },
+  {
+    "id": "f60f88183fae9091d1c5946e1752883d81a6f4b5",
+    "device": "Mid-Range",
+    "latency_ms": 18680,
+    "input_token_length": 333,
+    "output_token_length": 92,
+    "decode_speed_tps": 4.93
+  },
+  {
+    "id": "0e0d27e04adda776ee995712f6810d0f4dc94c51",
+    "device": "Mid-Range",
+    "latency_ms": 45565,
+    "input_token_length": 1481,
+    "output_token_length": 120,
+    "decode_speed_tps": 2.63
+  },
+  {
+    "id": "9adec853e916381fd0eb346e0b85fd292ce593ce",
+    "device": "Mid-Range",
+    "latency_ms": 30851,
+    "input_token_length": 884,
+    "output_token_length": 96,
+    "decode_speed_tps": 3.11
+  },
+  {
+    "id": "52786551cdfe97acc62fb8db3d282432a8c3a2ae",
+    "device": "Mid-Range",
+    "latency_ms": 26899,
+    "input_token_length": 676,
+    "output_token_length": 105,
+    "decode_speed_tps": 3.9
+  },
+  {
+    "id": "50541ccb7c6c2a4b686fde7c369bb30bfcb388ab",
+    "device": "Mid-Range",
+    "latency_ms": 33297,
+    "input_token_length": 1001,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.03
+  },
+  {
+    "id": "b849883caae5e6cb445e359307ce09785f081437",
+    "device": "Mid-Range",
+    "latency_ms": 40104,
+    "input_token_length": 1234,
+    "output_token_length": 111,
+    "decode_speed_tps": 2.77
+  },
+  {
+    "id": "48f8fd770c20e4692f8671a28fe4019b3e5d6790",
+    "device": "Mid-Range",
+    "latency_ms": 37183,
+    "input_token_length": 1052,
+    "output_token_length": 121,
+    "decode_speed_tps": 3.25
+  },
+  {
+    "id": "40a644c6fb360c514851bafe0de4b526cdf82e08",
+    "device": "Mid-Range",
+    "latency_ms": 30014,
+    "input_token_length": 773,
+    "output_token_length": 112,
+    "decode_speed_tps": 3.73
+  },
+  {
+    "id": "26a45fd9b60d3b8e89e557103f66d2ff0acf87c3",
+    "device": "Mid-Range",
+    "latency_ms": 41983,
+    "input_token_length": 1343,
+    "output_token_length": 114,
+    "decode_speed_tps": 2.72
+  },
+  {
+    "id": "e407903faf1322ecd86bc8154dcd2c65abdb8a78",
+    "device": "Mid-Range",
+    "latency_ms": 40832,
+    "input_token_length": 1373,
+    "output_token_length": 100,
+    "decode_speed_tps": 2.45
+  },
+  {
+    "id": "4fb1cf7338cdb12def610d42dd81a1ad1d4680f8",
+    "device": "Mid-Range",
+    "latency_ms": 27748,
+    "input_token_length": 653,
+    "output_token_length": 116,
+    "decode_speed_tps": 4.18
+  },
+  {
+    "id": "83c4fb8f572852913d4cda409d96482b3fc65f93",
+    "device": "Mid-Range",
+    "latency_ms": 29482,
+    "input_token_length": 740,
+    "output_token_length": 114,
+    "decode_speed_tps": 3.87
+  },
+  {
+    "id": "249749187ad31c250f85833abaa8070dc1286622",
+    "device": "Mid-Range",
+    "latency_ms": 20430,
+    "input_token_length": 481,
+    "output_token_length": 83,
+    "decode_speed_tps": 4.06
+  },
+  {
+    "id": "5384abf3f56788eb8c2d66345e6e97d5a30ccdef",
+    "device": "Mid-Range",
+    "latency_ms": 22798,
+    "input_token_length": 579,
+    "output_token_length": 87,
+    "decode_speed_tps": 3.82
+  },
+  {
+    "id": "26e1d805b0bab0148cb242c02941366e43a8b2e6",
+    "device": "Mid-Range",
+    "latency_ms": 24788,
+    "input_token_length": 655,
+    "output_token_length": 87,
+    "decode_speed_tps": 3.51
+  },
+  {
+    "id": "b7b00252d02e4eacfcc50b752ad4803ba1780be9",
+    "device": "Mid-Range",
+    "latency_ms": 19534,
+    "input_token_length": 436,
+    "output_token_length": 77,
+    "decode_speed_tps": 3.94
+  },
+  {
+    "id": "70377e9722a2826b8fc5f7b09820b267e92886cf",
+    "device": "Mid-Range",
+    "latency_ms": 31664,
+    "input_token_length": 979,
+    "output_token_length": 86,
+    "decode_speed_tps": 2.72
+  },
+  {
+    "id": "116bded692ea4842fb7092373116899a4e7d70c8",
+    "device": "Mid-Range",
+    "latency_ms": 16831,
+    "input_token_length": 245,
+    "output_token_length": 86,
+    "decode_speed_tps": 5.11
+  },
+  {
+    "id": "157178f60b7fab7617c0520e05bebc442446bcbc",
+    "device": "Mid-Range",
+    "latency_ms": 31234,
+    "input_token_length": 786,
+    "output_token_length": 99,
+    "decode_speed_tps": 3.17
+  },
+  {
+    "id": "49caac8a89cd666afd0842ec6d4b7de326b19de1",
+    "device": "Mid-Range",
+    "latency_ms": 53094,
+    "input_token_length": 1080,
+    "output_token_length": 105,
+    "decode_speed_tps": 1.98
+  },
+  {
+    "id": "8363bc1561e64b75c2ff911a7c05f98c7bd48668",
+    "device": "Mid-Range",
+    "latency_ms": 45030,
+    "input_token_length": 1372,
+    "output_token_length": 110,
+    "decode_speed_tps": 2.44
+  },
+  {
+    "id": "45f50aca0d3711379d2f783e5748f05d06185081",
+    "device": "Mid-Range",
+    "latency_ms": 27681,
+    "input_token_length": 540,
+    "output_token_length": 116,
+    "decode_speed_tps": 4.19
+  },
+  {
+    "id": "1211a23db42e7dd52a43e564a899ebbf1b2d1251",
+    "device": "High-End",
+    "latency_ms": 19344,
+    "input_token_length": 1528,
+    "output_token_length": 101,
+    "decode_speed_tps": 5.22
+  },
+  {
+    "id": "aff92aa2fc6e294efeeed70e9b0a0aefac32b030",
+    "device": "High-End",
+    "latency_ms": 17625,
+    "input_token_length": 1312,
+    "output_token_length": 114,
+    "decode_speed_tps": 6.47
+  },
+  {
+    "id": "bb7757b7bf3d90ec4f1d1915a4699eecafc25d1a",
+    "device": "High-End",
+    "latency_ms": 42789,
+    "input_token_length": 521,
+    "output_token_length": 96,
+    "decode_speed_tps": 2.24
+  },
+  {
+    "id": "8f25b2c54cb563b98e1f2619401df7137a3f0c77",
+    "device": "High-End",
+    "latency_ms": 14592,
+    "input_token_length": 962,
+    "output_token_length": 118,
+    "decode_speed_tps": 8.09
+  },
+  {
+    "id": "daa6ca8fe860fa70bed00e2bfd05ab7414b7cb0e",
+    "device": "High-End",
+    "latency_ms": 66728,
+    "input_token_length": 642,
+    "output_token_length": 83,
+    "decode_speed_tps": 1.24
+  },
+  {
+    "id": "c0cdf7175fc2032b547fafa8fb72c104886d38b7",
+    "device": "High-End",
+    "latency_ms": 11814,
+    "input_token_length": 577,
+    "output_token_length": 111,
+    "decode_speed_tps": 9.4
+  },
+  {
+    "id": "efed3617e3c01ba45b090f6fc6a62a7e77131576",
+    "device": "High-End",
+    "latency_ms": 29057,
+    "input_token_length": 2385,
+    "output_token_length": 130,
+    "decode_speed_tps": 4.47
+  },
+  {
+    "id": "694eb1e7c38a77d5eabb0e630e4194f47fa0bb08",
+    "device": "High-End",
+    "latency_ms": 14101,
+    "input_token_length": 949,
+    "output_token_length": 107,
+    "decode_speed_tps": 7.59
+  },
+  {
+    "id": "34964187fef7eb394d7d192f6197d315fcb7d852",
+    "device": "High-End",
+    "latency_ms": 13403,
+    "input_token_length": 840,
+    "output_token_length": 111,
+    "decode_speed_tps": 8.28
+  },
+  {
+    "id": "e1cffc79b05bd0a1a63137086ede6811762f3fc9",
+    "device": "High-End",
+    "latency_ms": 13441,
+    "input_token_length": 878,
+    "output_token_length": 107,
+    "decode_speed_tps": 7.96
+  },
+  {
+    "id": "055a276b1e49334d1dae623301578903975b87b3",
+    "device": "High-End",
+    "latency_ms": 10431,
+    "input_token_length": 549,
+    "output_token_length": 108,
+    "decode_speed_tps": 10.35
+  },
+  {
+    "id": "37c67e3bb3314618bbd47188b6e8d33185c25ae8",
+    "device": "High-End",
+    "latency_ms": 10157,
+    "input_token_length": 505,
+    "output_token_length": 106,
+    "decode_speed_tps": 10.44
+  },
+  {
+    "id": "505afe66a4fea2ff3190e190f9bfefdc395111fa",
+    "device": "High-End",
+    "latency_ms": 17859,
+    "input_token_length": 1242,
+    "output_token_length": 133,
+    "decode_speed_tps": 7.45
+  },
+  {
+    "id": "509fba532a438301c79a8aca9bf360cb06ef24ad",
+    "device": "High-End",
+    "latency_ms": 13592,
+    "input_token_length": 822,
+    "output_token_length": 121,
+    "decode_speed_tps": 8.9
+  },
+  {
+    "id": "11553a553300edebfbde80e20455ebaf13249be6",
+    "device": "High-End",
+    "latency_ms": 10897,
+    "input_token_length": 622,
+    "output_token_length": 101,
+    "decode_speed_tps": 9.27
+  },
+  {
+    "id": "35fd96052e6da4047ee55f35b60f47f3e1a0b0ac",
+    "device": "High-End",
+    "latency_ms": 13252,
+    "input_token_length": 760,
+    "output_token_length": 125,
+    "decode_speed_tps": 9.43
+  },
+  {
+    "id": "ad06d06cb31d621efffb02fe85daeb4143855364",
+    "device": "High-End",
+    "latency_ms": 19126,
+    "input_token_length": 1585,
+    "output_token_length": 88,
+    "decode_speed_tps": 4.6
+  },
+  {
+    "id": "50016c9ebda33812f64270387ddfcf87339d2e9c",
+    "device": "High-End",
+    "latency_ms": 12136,
+    "input_token_length": 666,
+    "output_token_length": 119,
+    "decode_speed_tps": 9.81
+  },
+  {
+    "id": "c1ac2ad61acf2c619323b64bf7c4e8ff56985928",
+    "device": "High-End",
+    "latency_ms": 12026,
+    "input_token_length": 687,
+    "output_token_length": 114,
+    "decode_speed_tps": 9.48
+  },
+  {
+    "id": "440d95dfddcac3bb83e7d2d5d3f779dc8195b776",
+    "device": "High-End",
+    "latency_ms": 17864,
+    "input_token_length": 1351,
+    "output_token_length": 109,
+    "decode_speed_tps": 6.1
+  },
+  {
+    "id": "ec4d5c7ea36de0118c5ea617488bf0a0c8500c85",
+    "device": "High-End",
+    "latency_ms": 14425,
+    "input_token_length": 966,
+    "output_token_length": 110,
+    "decode_speed_tps": 7.63
+  },
+  {
+    "id": "468b3b7a6fd4f236d3a5a0a88b9c9a3139ef0120",
+    "device": "High-End",
+    "latency_ms": 11080,
+    "input_token_length": 562,
+    "output_token_length": 111,
+    "decode_speed_tps": 10.02
+  },
+  {
+    "id": "d356ff2ff1bf0a994db249287c1525ff95100bd0",
+    "device": "High-End",
+    "latency_ms": 10221,
+    "input_token_length": 615,
+    "output_token_length": 88,
+    "decode_speed_tps": 8.61
+  },
+  {
+    "id": "a774c6f7a8cdbd5fe3d7f75f6660f4a6034df759",
+    "device": "High-End",
+    "latency_ms": 10280,
+    "input_token_length": 574,
+    "output_token_length": 93,
+    "decode_speed_tps": 9.05
+  },
+  {
+    "id": "30aaa44b5fa91609940655a81a9f17229c343681",
+    "device": "High-End",
+    "latency_ms": 15430,
+    "input_token_length": 1010,
+    "output_token_length": 121,
+    "decode_speed_tps": 7.84
+  },
+  {
+    "id": "e522dbe306074bfc08a63b430381161d4bb0cb99",
+    "device": "High-End",
+    "latency_ms": 8686,
+    "input_token_length": 768,
+    "output_token_length": 24,
+    "decode_speed_tps": 2.76
+  },
+  {
+    "id": "bab2d9d1c934c6be09ad34050569dc5153563b18",
+    "device": "High-End",
+    "latency_ms": 9505,
+    "input_token_length": 482,
+    "output_token_length": 95,
+    "decode_speed_tps": 9.99
+  },
+  {
+    "id": "879e68a2b78b3cf3f5c2581bbf6093871143ed7b",
+    "device": "High-End",
+    "latency_ms": 5937,
+    "input_token_length": 249,
+    "output_token_length": 59,
+    "decode_speed_tps": 9.94
+  },
+  {
+    "id": "c6946b25758430e35671438e7b5402a330e84a8b",
+    "device": "High-End",
+    "latency_ms": 15620,
+    "input_token_length": 1143,
+    "output_token_length": 100,
+    "decode_speed_tps": 6.4
+  },
+  {
+    "id": "be87f5ab3f17f13c76b9b240fe22e16172f15be6",
+    "device": "High-End",
+    "latency_ms": 11993,
+    "input_token_length": 717,
+    "output_token_length": 106,
+    "decode_speed_tps": 8.84
+  },
+  {
+    "id": "18ace93d44a05e8fab590c34aedf3bd38807704e",
+    "device": "High-End",
+    "latency_ms": 15858,
+    "input_token_length": 1072,
+    "output_token_length": 123,
+    "decode_speed_tps": 7.76
+  },
+  {
+    "id": "68e87222243c6bca9b01ca89e91304b11bc188c4",
+    "device": "High-End",
+    "latency_ms": 47913,
+    "input_token_length": 1795,
+    "output_token_length": 112,
+    "decode_speed_tps": 2.34
+  },
+  {
+    "id": "3281b670082cd3f50b104819a0bd0f253f296921",
+    "device": "High-End",
+    "latency_ms": 45163,
+    "input_token_length": 1121,
+    "output_token_length": 112,
+    "decode_speed_tps": 2.48
+  },
+  {
+    "id": "0e0e0f6d86365f11ce031ad7bafbfe395a0dac8e",
+    "device": "High-End",
+    "latency_ms": 25464,
+    "input_token_length": 321,
+    "output_token_length": 87,
+    "decode_speed_tps": 3.42
+  },
+  {
+    "id": "cde806eae49292fcc13e6fbbf6e30828fe5b20cf",
+    "device": "High-End",
+    "latency_ms": 18822,
+    "input_token_length": 1203,
+    "output_token_length": 23,
+    "decode_speed_tps": 1.22
+  },
+  {
+    "id": "1445d983e4c84d2f64e01b511b98089172f3c729",
+    "device": "High-End",
+    "latency_ms": 40985,
+    "input_token_length": 811,
+    "output_token_length": 118,
+    "decode_speed_tps": 2.88
+  },
+  {
+    "id": "c5e779b3c8c927fd209450635682cb115dcd299e",
+    "device": "High-End",
+    "latency_ms": 28529,
+    "input_token_length": 419,
+    "output_token_length": 81,
+    "decode_speed_tps": 2.84
+  },
+  {
+    "id": "b457f9495b354194a3e4bb0774a646c5212c637f",
+    "device": "High-End",
+    "latency_ms": 32026,
+    "input_token_length": 838,
+    "output_token_length": 95,
+    "decode_speed_tps": 2.97
+  },
+  {
+    "id": "8d7d3f0dd34be0dc7a9adaefb810f4694692e125",
+    "device": "High-End",
+    "latency_ms": 58975,
+    "input_token_length": 2274,
+    "output_token_length": 115,
+    "decode_speed_tps": 1.95
+  },
+  {
+    "id": "f79ec5e5f3beab95a30755e7fefed5bbc6540965",
+    "device": "High-End",
+    "latency_ms": 26538,
+    "input_token_length": 489,
+    "output_token_length": 79,
+    "decode_speed_tps": 2.98
+  },
+  {
+    "id": "cd464a71f78fcde9dac3af317c0c3c07095364f7",
+    "device": "High-End",
+    "latency_ms": 37328,
+    "input_token_length": 924,
+    "output_token_length": 85,
+    "decode_speed_tps": 2.28
+  },
+  {
+    "id": "084e566c5992ee26f4853a07e1e2f5d046a8f31d",
+    "device": "High-End",
+    "latency_ms": 36982,
+    "input_token_length": 482,
+    "output_token_length": 110,
+    "decode_speed_tps": 2.97
+  },
+  {
+    "id": "1fe844305054474677e5e06e108918ae559b5002",
+    "device": "High-End",
+    "latency_ms": 32277,
+    "input_token_length": 460,
+    "output_token_length": 99,
+    "decode_speed_tps": 3.07
+  },
+  {
+    "id": "ac86d30965597ae05542cc60000fadb6763ad681",
+    "device": "High-End",
+    "latency_ms": 43430,
+    "input_token_length": 1470,
+    "output_token_length": 94,
+    "decode_speed_tps": 2.16
+  },
+  {
+    "id": "6cac45235fabc6610fc2c9b55eb451ce323ae426",
+    "device": "High-End",
+    "latency_ms": 37408,
+    "input_token_length": 806,
+    "output_token_length": 121,
+    "decode_speed_tps": 3.23
+  },
+  {
+    "id": "90ff1e19becc5db1d965c128fada6a31a3800cae",
+    "device": "High-End",
+    "latency_ms": 33052,
+    "input_token_length": 1131,
+    "output_token_length": 114,
+    "decode_speed_tps": 3.45
+  },
+  {
+    "id": "a21f49697a6d0a14a822390d5ea85106a5b6de0c",
+    "device": "High-End",
+    "latency_ms": 37243,
+    "input_token_length": 710,
+    "output_token_length": 101,
+    "decode_speed_tps": 2.71
+  },
+  {
+    "id": "bfd2e47bd9f31d85edbfa175e11d84b62195cbdf",
+    "device": "High-End",
+    "latency_ms": 14564,
+    "input_token_length": 858,
+    "output_token_length": 20,
+    "decode_speed_tps": 1.37
+  },
+  {
+    "id": "a3ea4d5d3afb8701c31d15f2587ad048c9781d3d",
+    "device": "High-End",
+    "latency_ms": 35761,
+    "input_token_length": 898,
+    "output_token_length": 98,
+    "decode_speed_tps": 2.74
+  },
+  {
+    "id": "6ae9d415ebbcb9678c70f4e7ee9687a1bd2a8311",
+    "device": "High-End",
+    "latency_ms": 34146,
+    "input_token_length": 793,
+    "output_token_length": 111,
+    "decode_speed_tps": 3.25
+  },
+  {
+    "id": "1348c6008fe4dbf7ab5b977109ee77220c889e1b",
+    "device": "High-End",
+    "latency_ms": 39674,
+    "input_token_length": 1261,
+    "output_token_length": 104,
+    "decode_speed_tps": 2.62
+  },
+  {
+    "id": "ce5347453db97ef2b95a909a7cccf4b11bb485f2",
+    "device": "High-End",
+    "latency_ms": 27281,
+    "input_token_length": 398,
+    "output_token_length": 101,
+    "decode_speed_tps": 3.7
+  },
+  {
+    "id": "3d305a3c8bc0f0ac24cd6624cf11dda9549ed678",
+    "device": "High-End",
+    "latency_ms": 20892,
+    "input_token_length": 191,
+    "output_token_length": 69,
+    "decode_speed_tps": 3.3
+  },
+  {
+    "id": "46a27f4800dc142e8c20432e27fc7314974d11e4",
+    "device": "High-End",
+    "latency_ms": 36611,
+    "input_token_length": 1014,
+    "output_token_length": 120,
+    "decode_speed_tps": 3.28
+  },
+  {
+    "id": "6e27f01032684c94804138a490c4a027ad082c01",
+    "device": "High-End",
+    "latency_ms": 27897,
+    "input_token_length": 508,
+    "output_token_length": 119,
+    "decode_speed_tps": 4.27
+  },
+  {
+    "id": "736e2dd063fadebec16253d56c15360f66b670f1",
+    "device": "High-End",
+    "latency_ms": 17604,
+    "input_token_length": 310,
+    "output_token_length": 84,
+    "decode_speed_tps": 4.77
+  },
+  {
+    "id": "7107c58d03b34f404e26430e88b6c61551fb1d67",
+    "device": "High-End",
+    "latency_ms": 30998,
+    "input_token_length": 724,
+    "output_token_length": 89,
+    "decode_speed_tps": 2.87
+  },
+  {
+    "id": "33c5d95fc08df92318a146bf0e27fa17c69530e6",
+    "device": "High-End",
+    "latency_ms": 33876,
+    "input_token_length": 1002,
+    "output_token_length": 99,
+    "decode_speed_tps": 2.92
+  },
+  {
+    "id": "1ce4460de8405031d2a87eeadc9bda946ac3f915",
+    "device": "High-End",
+    "latency_ms": 44539,
+    "input_token_length": 1412,
+    "output_token_length": 119,
+    "decode_speed_tps": 2.67
+  },
+  {
+    "id": "920e4463e8dac3f5868f7e312d0a7624e3fa0564",
+    "device": "High-End",
+    "latency_ms": 41432,
+    "input_token_length": 1219,
+    "output_token_length": 106,
+    "decode_speed_tps": 2.56
+  },
+  {
+    "id": "4b33fe31111cdd7e1189435f2ce8aef64aca4170",
+    "device": "High-End",
+    "latency_ms": 34199,
+    "input_token_length": 1030,
+    "output_token_length": 113,
+    "decode_speed_tps": 3.3
+  },
+  {
+    "id": "c8ca9d1026d415a376190aed5d841c9a5f1bf0e6",
+    "device": "High-End",
+    "latency_ms": 37282,
+    "input_token_length": 971,
+    "output_token_length": 107,
+    "decode_speed_tps": 2.87
+  },
+  {
+    "id": "9dd6b80460c8598d3c43410b22a3ab6eda1c8bce",
+    "device": "High-End",
+    "latency_ms": 27848,
+    "input_token_length": 880,
+    "output_token_length": 106,
+    "decode_speed_tps": 3.81
+  },
+  {
+    "id": "bb7b1b13029de48092ee5d2a975e5e330ff7faa8",
+    "device": "High-End",
+    "latency_ms": 32397,
+    "input_token_length": 838,
+    "output_token_length": 116,
+    "decode_speed_tps": 3.58
+  },
+  {
+    "id": "7477aac2b0c1e6154b4cc9a6774c2c7bc63efaaf",
+    "device": "High-End",
+    "latency_ms": 20499,
+    "input_token_length": 960,
+    "output_token_length": 114,
+    "decode_speed_tps": 5.56
+  },
+  {
+    "id": "7730bafdd90069375e88aaeae2cc5e9bb87a6685",
+    "device": "High-End",
+    "latency_ms": 20358,
+    "input_token_length": 799,
+    "output_token_length": 113,
+    "decode_speed_tps": 5.55
+  },
+  {
+    "id": "f1c384d8fac5578c4c567d026781ed010ae25cdf",
+    "device": "High-End",
+    "latency_ms": 64745,
+    "input_token_length": 781,
+    "output_token_length": 98,
+    "decode_speed_tps": 1.51
+  },
+  {
+    "id": "ca4ba32a8bef2333b2a1b7e85866a99d3cf689d8",
+    "device": "High-End",
+    "latency_ms": 54290,
+    "input_token_length": 728,
+    "output_token_length": 97,
+    "decode_speed_tps": 1.79
+  },
+  {
+    "id": "c265f3c77a4ce860333a932dd23fa77e27c8e825",
+    "device": "High-End",
+    "latency_ms": 41321,
+    "input_token_length": 1338,
+    "output_token_length": 132,
+    "decode_speed_tps": 3.19
+  },
+  {
+    "id": "b11dd5aaee8d6619c629383fb82caa5aa8a25e3e",
+    "device": "High-End",
+    "latency_ms": 39137,
+    "input_token_length": 526,
+    "output_token_length": 99,
+    "decode_speed_tps": 2.53
+  },
+  {
+    "id": "46b40d1afad525866bd41a639648f7dfbe1050ec",
+    "device": "High-End",
+    "latency_ms": 40306,
+    "input_token_length": 757,
+    "output_token_length": 73,
+    "decode_speed_tps": 1.81
+  },
+  {
+    "id": "3db34a01672de370fe2165ba570e056b615d6c9b",
+    "device": "High-End",
+    "latency_ms": 53547,
+    "input_token_length": 747,
+    "output_token_length": 93,
+    "decode_speed_tps": 1.74
+  },
+  {
+    "id": "e8113a819d77e917b4166089705ff40e5ecdba77",
+    "device": "High-End",
+    "latency_ms": 44962,
+    "input_token_length": 800,
+    "output_token_length": 114,
+    "decode_speed_tps": 2.54
+  },
+  {
+    "id": "59e0b12e68fb7e759b2982698094ee66f1287528",
+    "device": "High-End",
+    "latency_ms": 23776,
+    "input_token_length": 414,
+    "output_token_length": 64,
+    "decode_speed_tps": 2.69
+  },
+  {
+    "id": "7a460c06d63584a0f65fe98a8585600833239812",
+    "device": "High-End",
+    "latency_ms": 33440,
+    "input_token_length": 1337,
+    "output_token_length": 99,
+    "decode_speed_tps": 2.96
+  },
+  {
+    "id": "6e722d26dac423fb69682990c6cd0d507cab5410",
+    "device": "High-End",
+    "latency_ms": 54675,
+    "input_token_length": 953,
+    "output_token_length": 124,
+    "decode_speed_tps": 2.27
+  },
+  {
+    "id": "7d5d118f3152ed1ae1318a6877af0d60b3225f89",
+    "device": "High-End",
+    "latency_ms": 16206,
+    "input_token_length": 1144,
+    "output_token_length": 112,
+    "decode_speed_tps": 6.91
+  },
+  {
+    "id": "d6df7f5d99865b048caf00773602c0a7b1133bf5",
+    "device": "High-End",
+    "latency_ms": 30102,
+    "input_token_length": 2398,
+    "output_token_length": 138,
+    "decode_speed_tps": 4.58
+  },
+  {
+    "id": "f60f88183fae9091d1c5946e1752883d81a6f4b5",
+    "device": "High-End",
+    "latency_ms": 6753,
+    "input_token_length": 333,
+    "output_token_length": 67,
+    "decode_speed_tps": 9.92
+  },
+  {
+    "id": "0e0d27e04adda776ee995712f6810d0f4dc94c51",
+    "device": "High-End",
+    "latency_ms": 19537,
+    "input_token_length": 1481,
+    "output_token_length": 120,
+    "decode_speed_tps": 6.14
+  },
+  {
+    "id": "9adec853e916381fd0eb346e0b85fd292ce593ce",
+    "device": "High-End",
+    "latency_ms": 15367,
+    "input_token_length": 884,
+    "output_token_length": 95,
+    "decode_speed_tps": 6.18
+  },
+  {
+    "id": "52786551cdfe97acc62fb8db3d282432a8c3a2ae",
+    "device": "High-End",
+    "latency_ms": 13475,
+    "input_token_length": 676,
+    "output_token_length": 94,
+    "decode_speed_tps": 6.98
+  },
+  {
+    "id": "50541ccb7c6c2a4b686fde7c369bb30bfcb388ab",
+    "device": "High-End",
+    "latency_ms": 20897,
+    "input_token_length": 1001,
+    "output_token_length": 109,
+    "decode_speed_tps": 5.22
+  },
+  {
+    "id": "b849883caae5e6cb445e359307ce09785f081437",
+    "device": "High-End",
+    "latency_ms": 16895,
+    "input_token_length": 1234,
+    "output_token_length": 111,
+    "decode_speed_tps": 6.57
+  },
+  {
+    "id": "48f8fd770c20e4692f8671a28fe4019b3e5d6790",
+    "device": "High-End",
+    "latency_ms": 15722,
+    "input_token_length": 1052,
+    "output_token_length": 121,
+    "decode_speed_tps": 7.7
+  },
+  {
+    "id": "40a644c6fb360c514851bafe0de4b526cdf82e08",
+    "device": "High-End",
+    "latency_ms": 12616,
+    "input_token_length": 773,
+    "output_token_length": 112,
+    "decode_speed_tps": 8.88
+  },
+  {
+    "id": "26a45fd9b60d3b8e89e557103f66d2ff0acf87c3",
+    "device": "High-End",
+    "latency_ms": 18304,
+    "input_token_length": 1343,
+    "output_token_length": 114,
+    "decode_speed_tps": 6.23
+  },
+  {
+    "id": "e407903faf1322ecd86bc8154dcd2c65abdb8a78",
+    "device": "High-End",
+    "latency_ms": 23198,
+    "input_token_length": 1373,
+    "output_token_length": 101,
+    "decode_speed_tps": 4.35
+  },
+  {
+    "id": "4fb1cf7338cdb12def610d42dd81a1ad1d4680f8",
+    "device": "High-End",
+    "latency_ms": 18218,
+    "input_token_length": 653,
+    "output_token_length": 116,
+    "decode_speed_tps": 6.37
+  },
+  {
+    "id": "83c4fb8f572852913d4cda409d96482b3fc65f93",
+    "device": "High-End",
+    "latency_ms": 12394,
+    "input_token_length": 740,
+    "output_token_length": 114,
+    "decode_speed_tps": 9.2
+  },
+  {
+    "id": "249749187ad31c250f85833abaa8070dc1286622",
+    "device": "High-End",
+    "latency_ms": 9481,
+    "input_token_length": 481,
+    "output_token_length": 96,
+    "decode_speed_tps": 10.13
+  },
+  {
+    "id": "5384abf3f56788eb8c2d66345e6e97d5a30ccdef",
+    "device": "High-End",
+    "latency_ms": 10269,
+    "input_token_length": 579,
+    "output_token_length": 96,
+    "decode_speed_tps": 9.35
+  },
+  {
+    "id": "26e1d805b0bab0148cb242c02941366e43a8b2e6",
+    "device": "High-End",
+    "latency_ms": 16474,
+    "input_token_length": 655,
+    "output_token_length": 111,
+    "decode_speed_tps": 6.74
+  },
+  {
+    "id": "b7b00252d02e4eacfcc50b752ad4803ba1780be9",
+    "device": "High-End",
+    "latency_ms": 8764,
+    "input_token_length": 436,
+    "output_token_length": 77,
+    "decode_speed_tps": 8.79
+  },
+  {
+    "id": "70377e9722a2826b8fc5f7b09820b267e92886cf",
+    "device": "High-End",
+    "latency_ms": 37575,
+    "input_token_length": 979,
+    "output_token_length": 86,
+    "decode_speed_tps": 2.29
+  },
+  {
+    "id": "116bded692ea4842fb7092373116899a4e7d70c8",
+    "device": "High-End",
+    "latency_ms": 9410,
+    "input_token_length": 245,
+    "output_token_length": 86,
+    "decode_speed_tps": 9.14
+  },
+  {
+    "id": "157178f60b7fab7617c0520e05bebc442446bcbc",
+    "device": "High-End",
+    "latency_ms": 22070,
+    "input_token_length": 786,
+    "output_token_length": 99,
+    "decode_speed_tps": 4.49
+  },
+  {
+    "id": "49caac8a89cd666afd0842ec6d4b7de326b19de1",
+    "device": "High-End",
+    "latency_ms": 25231,
+    "input_token_length": 1080,
+    "output_token_length": 122,
+    "decode_speed_tps": 4.84
+  },
+  {
+    "id": "8363bc1561e64b75c2ff911a7c05f98c7bd48668",
+    "device": "High-End",
+    "latency_ms": 24411,
+    "input_token_length": 1372,
+    "output_token_length": 116,
+    "decode_speed_tps": 4.75
+  },
+  {
+    "id": "45f50aca0d3711379d2f783e5748f05d06185081",
+    "device": "High-End",
+    "latency_ms": 11147,
+    "input_token_length": 540,
+    "output_token_length": 116,
+    "decode_speed_tps": 10.41
+  }
+]
